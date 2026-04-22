@@ -13,8 +13,9 @@ export default function BackgroundAuthClient({ children }: LoginProps) {
         <Image
           src="/images/authBackground-jpeg.jpg"
           alt="Background"
-          layout="fill"
-          objectFit="cover"
+          fill
+          loading="eager"
+          className="object-cover"
         />
       </div>
       {children}
