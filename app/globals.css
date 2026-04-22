@@ -48,6 +48,24 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+*,
+html,
+body {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 1rem;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
