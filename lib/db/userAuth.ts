@@ -25,7 +25,14 @@ export async function registerUser(
 export async function loginUser(formData: {
   email: string;
   password: string;
-}): Promise<{ data: { accessToken: string; name: string; email: string } }> {
+}): Promise<{
+  data: {
+    accessToken: string;
+    name: string;
+    email: string;
+    venueManager: boolean;
+  };
+}> {
   const response = await fetch(`${process.env.API_AUTH_LOGIN_URL}`, {
     method: "POST",
     headers: {

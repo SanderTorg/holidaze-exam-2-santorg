@@ -1,36 +1,36 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface UserState {
-  id: number;
   name: string;
   email: string;
-  token: string;
-  isUserLoggedIn: boolean;
-  isUserAdmin: boolean;
+  accessToken: string;
+  venueManager: boolean;
+  isLoggedIn: boolean;
 }
 
 interface UserActions {
-  setUser: (user: UserState) => void;
+  setUser: (user: Omit<UserState, "isLoggedIn">) => void;
   clearUser: () => void;
 }
 
 export type UserStore = UserState & UserActions;
 
-const useUserStore = create<UserStore>((set) => ({
-  id: 0,
+const defaultState: UserState = {
   name: "",
   email: "",
-  token: "",
-  isUserLoggedIn: false,
-  isUserAdmin: false,
-  setUser: (user: UserState) => set(user),
-  clearUser: () =>
-    set({
-      id: 0,
-      name: "",
-      email: "",
-      token: "",
-      isUserLoggedIn: false,
-      isUserAdmin: false,
+  accessToken: "",
+  venueManager: false,
+  isLoggedIn: false,
+};
+
+export const useUserStore = create<UserStore>()(
+  persist(
+    (set) => ({
+      ...defaultState,
+      setUser: (user) => set({ ...user, isLoggedIn: true }),
+      clearUser: () => set(defaultState),
     }),
-}));
+    { name: "user-store" },
+  ),
+);

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { registerAction } from "@/lib/actions/authActions";
+import Link from "next/link";
 
 export default function RegisterPageClient() {
   const router = useRouter();
@@ -21,8 +22,11 @@ export default function RegisterPageClient() {
       await registerAction(values);
       toast.success("Account created! You can now log in.");
       router.push("/login");
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Registration failed");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Registration failed",
+      );
+      console.error("Registration failed:", error);
     }
   }
 
@@ -46,6 +50,7 @@ export default function RegisterPageClient() {
             type="text"
             id="name"
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+            placeholder="Bob Ross"
           />
           {errors.name && (
             <p className="mt-1 text-xs text-red-600">{errors.name.message}</p>
@@ -64,6 +69,7 @@ export default function RegisterPageClient() {
             type="email"
             id="email"
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+            placeholder="bob@stud.noroff.no"
           />
           {errors.email && (
             <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>
@@ -82,6 +88,7 @@ export default function RegisterPageClient() {
             type="password"
             id="password"
             className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+            placeholder="********"
           />
           {errors.password && (
             <p className="mt-1 text-xs text-red-600">
@@ -105,15 +112,19 @@ export default function RegisterPageClient() {
           </label>
         </div>
 
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          className="w-full cursor-pointer"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? "Creating account..." : "Register"}
         </Button>
 
         <p className="mt-4 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <a href="/login" className="text-indigo-600 hover:text-indigo-500">
+          <Link href="/login" className="text-indigo-600 hover:text-indigo-500">
             Log in
-          </a>
+          </Link>
         </p>
       </form>
     </section>
