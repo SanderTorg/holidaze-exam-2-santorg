@@ -29,6 +29,7 @@ export default function LoginPageClient() {
         email: result.data.email,
         accessToken: result.data.accessToken,
         venueManager: result.data.venueManager,
+        avatar: result.data.avatar,
       });
       toast.success("Login successful! Redirecting...");
       router.push("/");
