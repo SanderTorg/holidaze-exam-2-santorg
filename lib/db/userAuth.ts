@@ -31,6 +31,7 @@ export async function loginUser(formData: {
     name: string;
     email: string;
     venueManager: boolean;
+    avatar?: { url: string; alt: string };
   };
 }> {
   const response = await fetch(`${process.env.API_AUTH_LOGIN_URL}`, {
