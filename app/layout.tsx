@@ -39,7 +39,9 @@ export default function RootLayout({
             <Navbar />
           </header>
           <main className="flex-1">{children}</main>
-          <Footer />
+          <footer>
+            <Footer />
+          </footer>
         </div>
         <Toaster position="top-center" />
       </body>

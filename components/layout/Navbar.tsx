@@ -25,7 +25,12 @@ export default function Navbar() {
     router.push("/");
   }
 
-  const navLinks = [{ href: "/", label: "Home" }];
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/venues", label: "Venues" },
+    { href: "/contact", label: "Contact " },
+    { href: "/about", label: "About Us" },
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
