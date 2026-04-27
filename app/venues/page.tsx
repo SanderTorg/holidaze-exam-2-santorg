@@ -1,6 +1,5 @@
 import { ListingsClient } from "@/components/pages/venues/ListingsClient";
 import { getAllVenues } from "@/lib/db/api";
-import { Datum } from "@/lib/types/apiTypes";
 import { Suspense } from "react";
 
 export default async function Venues() {
