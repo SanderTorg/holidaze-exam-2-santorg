@@ -9,10 +9,13 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      NOROFF_API_KEY: ${{secrets.NOROFF_API_KEY}}
       API_AUTH_REGISTER_URL: ${{secrets.API_AUTH_REGISTER_URL}}
       API_AUTH_LOGIN_URL: ${{secrets.API_AUTH_LOGIN_URL}}
+      API_HOLIDAZE_BOOKINGS_URL: ${{secrets.API_HOLIDAZE_BOOKINGS_URL}}
+      API_HOLIDAZE_VENUES_URL: ${{secrets.API_HOLIDAZE_VENUES_URL}}
+      API_HOLIDAZE_PROFILES_URL: ${{secrets.API_HOLIDAZE_PROFILES_URL}}
       LOCAL_BASE_URL: ${{secrets.LOCAL_BASE_URL}}
+      NOROFF_API_KEY: ${{secrets.NOROFF_API_KEY}}
       VERCEL_DEPLOYMENT_URL: ${{secrets.VERCEL_DEPLOYMENT_URL}}
     steps:
       - uses: actions/checkout@v4
