@@ -2,6 +2,8 @@ import { ListingsClient } from "@/components/pages/venues/ListingsClient";
 import { getAllVenues } from "@/lib/db/api";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 export default async function Venues() {
   const venues = await getAllVenues();
 
