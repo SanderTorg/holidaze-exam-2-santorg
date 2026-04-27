@@ -1,0 +1,39 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master, staging ]
+  pull_request:
+    branches: [ main, master, staging ]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      API_AUTH_REGISTER_URL: ${{secrets.API_AUTH_REGISTER_URL}}
+      API_AUTH_LOGIN_URL: ${{secrets.API_AUTH_LOGIN_URL}}
+      API_HOLIDAZE_BOOKINGS_URL: ${{secrets.API_HOLIDAZE_BOOKINGS_URL}}
+      API_HOLIDAZE_VENUES_URL: ${{secrets.API_HOLIDAZE_VENUES_URL}}
+      API_HOLIDAZE_PROFILES_URL: ${{secrets.API_HOLIDAZE_PROFILES_URL}}
+      LOCAL_BASE_URL: ${{secrets.LOCAL_BASE_URL}}
+      NOROFF_API_KEY: ${{secrets.NOROFF_API_KEY}}
+      VERCEL_DEPLOYMENT_URL: ${{secrets.VERCEL_DEPLOYMENT_URL}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Build app
+        run: npm run build
+      - name: Run Playwright tests
+        run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
