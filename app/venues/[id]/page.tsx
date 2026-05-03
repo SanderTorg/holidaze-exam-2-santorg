@@ -14,10 +14,8 @@ export default async function DetailsPage({
   if (!venue) return notFound();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
-      <Suspense fallback={<p>Loading listing details...</p>}>
-        <ListingDetailsClientPage venue={venue} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<p>Loading listing details...</p>}>
+      <ListingDetailsClientPage venue={venue} />
+    </Suspense>
   );
 }
