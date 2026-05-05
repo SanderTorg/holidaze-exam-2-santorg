@@ -33,8 +33,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable}  h-full antialiased`}>
-        <div className="min-h-full flex flex-col">
+      <body className={`${inter.variable} antialiased`}>
+        <div className="min-h-screen flex flex-col">
           <header>
             <Navbar />
           </header>

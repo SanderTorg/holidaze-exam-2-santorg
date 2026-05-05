@@ -15,7 +15,7 @@ export default function LayoutClient({
 
   return (
     <>
-      <main className={`flex-1  ${isAuthPage ? "" : "px-4 py-6"}`}>
+      <main className={`flex-1 min-h-0 ${isAuthPage ? "" : "px-4 py-6"}`}>
         {children}
       </main>
       {!isAuthPage && (
