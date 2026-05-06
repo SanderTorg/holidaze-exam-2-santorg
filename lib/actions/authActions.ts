@@ -1,6 +1,6 @@
 "use server";
 
-import { registerUser, loginUser } from "@/lib/db/userAuth";
+import { registerUser, loginUser, updateProfile } from "@/lib/db/userAuth";
 import type { RegisterFormData } from "@/lib/types/userTypes";
 
 export async function registerAction(formData: RegisterFormData) {
@@ -14,4 +14,12 @@ export async function loginAction(formData: {
 }) {
   const data = await loginUser(formData);
   return data;
+}
+
+export async function updateProfileAction(
+  name: string,
+  accessToken: string,
+  data: { bio?: string; avatar?: { url: string; alt: string } },
+) {
+  return await updateProfile(name, accessToken, data);
 }

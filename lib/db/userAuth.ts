@@ -114,14 +114,17 @@ export async function loginUser(formData: {
     avatar?: { url: string; alt: string };
   };
 }> {
-  const response = await fetch(`${process.env.API_AUTH_LOGIN_URL}?_holidaze=true`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}`,
+  const response = await fetch(
+    `${process.env.API_AUTH_LOGIN_URL}?_holidaze=true`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}`,
+      },
+      body: JSON.stringify(formData),
     },
-    body: JSON.stringify(formData),
-  });
+  );
 
   const data = await response.json();
 

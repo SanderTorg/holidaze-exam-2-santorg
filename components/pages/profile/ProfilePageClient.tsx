@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserStore } from "@/lib/hooks/useUserStore";
-import { updateProfile } from "@/lib/db/userAuth";
+import { updateProfileAction } from "@/lib/actions/authActions";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -35,7 +35,7 @@ export default function ProfilePageClient() {
   async function handleSave() {
     setSaving(true);
     try {
-      const updated = await updateProfile(name, accessToken, {
+      const updated = await updateProfileAction(name, accessToken, {
         bio: bio || undefined,
         avatar: avatarUrl
           ? { url: avatarUrl, alt: avatarAlt || name }
@@ -93,7 +93,7 @@ export default function ProfilePageClient() {
 
         <button
           onClick={() => setEditing((v) => !v)}
-          className="ml-auto flex items-center gap-1.5 text-sm border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors"
+          className="cursor-pointer ml-auto flex items-center gap-1.5 text-sm border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors"
         >
           <Pencil size={14} />
           Edit
@@ -176,7 +176,7 @@ export default function ProfilePageClient() {
           </p>
           <button
             onClick={() => router.push("/bookings")}
-            className="self-start px-4 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+            className="cursor-pointer self-start px-4 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             View my bookings
           </button>
