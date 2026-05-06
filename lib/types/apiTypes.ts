@@ -44,6 +44,29 @@ export interface DatumMeta {
   wifi: boolean;
 }
 
+export interface CreateVenueInput {
+  name: string;
+  description: string;
+  price: number;
+  maxGuests: number;
+  media?: { url: string; alt: string }[];
+  meta?: {
+    wifi?: boolean;
+    parking?: boolean;
+    breakfast?: boolean;
+    pets?: boolean;
+  };
+  location?: {
+    address?: string;
+    city?: string;
+    zip?: string;
+    country?: string;
+    continent?: string;
+    lat?: number;
+    lng?: number;
+  };
+}
+
 export interface RootObjectMeta {
   currentPage: number;
   isFirstPage: boolean;
