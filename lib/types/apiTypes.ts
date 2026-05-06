@@ -67,6 +67,24 @@ export interface CreateVenueInput {
   };
 }
 
+export interface Booking {
+  id: string;
+  dateFrom: string;
+  dateTo: string;
+  guests: number;
+  created: string;
+  updated: string;
+  customer?: {
+    name: string;
+    email: string;
+    avatar?: { url: string; alt: string };
+  };
+}
+
+export interface DatumWithBookings extends Datum {
+  bookings?: Booking[];
+}
+
 export interface RootObjectMeta {
   currentPage: number;
   isFirstPage: boolean;
