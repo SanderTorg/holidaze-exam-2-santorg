@@ -116,7 +116,7 @@ export default function VenueManagerDashboard() {
         <h1 className="text-2xl font-bold">My Venues</h1>
         <button
           onClick={() => setView("create")}
-          className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
+          className="flex cursor-pointer items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
         >
           <Plus size={16} />
           Add New Venue
@@ -132,7 +132,7 @@ export default function VenueManagerDashboard() {
           <p className="mb-4">You have not created any venues yet.</p>
           <button
             onClick={() => setView("create")}
-            className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors mx-auto"
+            className="flex cursor-pointer items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors mx-auto"
           >
             <Plus size={16} />
             Create your first venue
@@ -187,19 +187,19 @@ export default function VenueManagerDashboard() {
                     setEditingVenue(venue);
                     setView("edit");
                   }}
-                  className="flex items-center gap-1.5 text-sm border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors"
+                  className="flex cursor-pointer items-center gap-1.5 text-sm border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors"
                 >
                   <Pencil size={14} /> Edit
                 </button>
                 <button
                   onClick={() => handleDelete(venue.id)}
-                  className="flex items-center gap-1.5 text-sm border border-red-200 text-red-600 rounded-lg px-3 py-1.5 hover:bg-red-50 transition-colors"
+                  className="flex cursor-pointer items-center gap-1.5 text-sm border border-red-200 text-red-600 rounded-lg px-3 py-1.5 hover:bg-red-50 transition-colors"
                 >
                   <Trash2 size={14} /> Delete
                 </button>
                 <button
                   onClick={() => toggleBookings(venue.id)}
-                  className="flex items-center justify-center gap-1.5 text-sm border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors"
+                  className="flex cursor-pointer items-center justify-center gap-1.5 text-sm border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors"
                 >
                   <CalendarDays size={14} />
                   {expandedId === venue.id ? (

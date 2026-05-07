@@ -8,6 +8,7 @@ interface UserState {
   venueManager: boolean;
   isLoggedIn: boolean;
   avatar?: { url: string; alt: string };
+  banner?: { url: string; alt: string };
 }
 
 interface UserActions {
@@ -24,6 +25,7 @@ const defaultState: UserState = {
   venueManager: false,
   isLoggedIn: false,
   avatar: undefined,
+  banner: undefined,
 };
 
 export const useUserStore = create<UserStore>()(

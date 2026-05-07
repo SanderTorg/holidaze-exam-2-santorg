@@ -19,7 +19,7 @@ export async function loginAction(formData: {
 export async function updateProfileAction(
   name: string,
   accessToken: string,
-  data: { bio?: string; avatar?: { url: string; alt: string } },
+  data: { bio?: string; avatar?: { url: string; alt: string }; banner?: { url: string; alt: string } },
 ) {
   return await updateProfile(name, accessToken, data);
 }

@@ -53,7 +53,7 @@ export async function deleteVenue(
 export async function updateProfile(
   name: string,
   accessToken: string,
-  data: { bio?: string; avatar?: { url: string; alt: string } },
+  data: { bio?: string; avatar?: { url: string; alt: string }; banner?: { url: string; alt: string } },
 ): Promise<{
   bio?: string;
   avatar?: { url: string; alt: string };
@@ -116,6 +116,7 @@ export async function loginUser(formData: {
     email: string;
     venueManager: boolean;
     avatar?: { url: string; alt: string };
+    banner?: { url: string; alt: string };
   };
 }> {
   const response = await fetch(
