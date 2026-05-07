@@ -1,5 +1,9 @@
 import type { RegisterFormData, RegisterResponse } from "../types/userTypes";
-import type { CreateVenueInput, Datum } from "../types/apiTypes";
+import type {
+  CreateVenueInput,
+  Datum,
+  DatumWithBookings,
+} from "../types/apiTypes";
 
 export async function createVenue(
   accessToken: string,
@@ -49,7 +53,7 @@ export async function deleteVenue(
 export async function updateProfile(
   name: string,
   accessToken: string,
-  data: { bio?: string; avatar?: { url: string; alt: string } },
+  data: { bio?: string; avatar?: { url: string; alt: string }; banner?: { url: string; alt: string } },
 ): Promise<{
   bio?: string;
   avatar?: { url: string; alt: string };
@@ -112,6 +116,7 @@ export async function loginUser(formData: {
     email: string;
     venueManager: boolean;
     avatar?: { url: string; alt: string };
+    banner?: { url: string; alt: string };
   };
 }> {
   const response = await fetch(
@@ -135,4 +140,63 @@ export async function loginUser(formData: {
   }
 
   return data;
+}
+
+export async function getManagerVenues(
+  name: string,
+  accessToken: string,
+): Promise<Datum[]> {
+  const response = await fetch(
+    `${process.env.API_HOLIDAZE_PROFILES_URL}/${name}/venues`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}`,
+      },
+    },
+  );
+  const json = await response.json();
+  if (!response.ok) return [];
+  return Array.isArray(json?.data) ? json.data : [];
+}
+
+export async function updateVenue(
+  accessToken: string,
+  id: string,
+  venue: CreateVenueInput,
+): Promise<Datum> {
+  const response = await fetch(`${process.env.API_HOLIDAZE_VENUES_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+      "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}`,
+    },
+    body: JSON.stringify(venue),
+  });
+  const json = await response.json();
+  if (!response.ok) {
+    const message =
+      json?.errors?.[0]?.message ?? `Update venue failed (${response.status})`;
+    throw new Error(message);
+  }
+  return json?.data;
+}
+
+export async function getVenueWithBookings(
+  accessToken: string,
+  id: string,
+): Promise<DatumWithBookings | null> {
+  const response = await fetch(
+    `${process.env.API_HOLIDAZE_VENUES_URL}/${id}?_bookings=true&_customer=true`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}`,
+      },
+    },
+  );
+  const json = await response.json();
+  if (!response.ok) return null;
+  return json?.data ?? null;
 }
