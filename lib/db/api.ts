@@ -15,11 +15,12 @@ export async function getAllVenues(): Promise<{
 
 export async function getVenueById(
   id: string,
-): Promise<import("@/lib/types/apiTypes").Datum | null> {
+): Promise<import("@/lib/types/apiTypes").DatumWithBookings | null> {
   try {
-    const res = await fetch(`${process.env.API_HOLIDAZE_VENUES_URL}/${id}`, {
-      next: { revalidate: 60 },
-    });
+    const res = await fetch(
+      `${process.env.API_HOLIDAZE_VENUES_URL}/${id}?_bookings=true`,
+      { next: { revalidate: 60 } },
+    );
     if (!res.ok) return null;
     const json = await res.json();
     return json?.data ?? null;
