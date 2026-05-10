@@ -1,19 +1,44 @@
 "use client";
 
-import { Datum } from "@/lib/types/apiTypes";
-import {
-  CalendarDays,
-  Car,
-  Coffee,
-  Dog,
-  MapPin,
-  Star,
-  Users,
-  Wifi,
-} from "lucide-react";
+import { DatumWithBookings } from "@/lib/types/apiTypes";
+import { Car, Coffee, Dog, MapPin, Star, Users, Wifi } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
+import { DateRange } from "react-day-picker";
+import { Calendar } from "@/components/ui/calendar";
+import { DateTime } from "luxon";
+import { enUS } from "date-fns/locale";
 
-export default function ListingDetailsClientPage({ venue }: { venue: Datum }) {
+export default function ListingDetailsClientPage({
+  venue,
+}: {
+  venue: DatumWithBookings;
+}) {
+  const [range, setRange] = useState<DateRange | undefined>();
+
+  const bookedDates: Date[] = (venue.bookings ?? []).flatMap((b) => {
+    const dates: Date[] = [];
+    let current = DateTime.fromISO(b.dateFrom).startOf("day");
+    const end = DateTime.fromISO(b.dateTo).startOf("day");
+    while (current <= end) {
+      dates.push(current.toJSDate());
+      current = current.plus({ days: 1 });
+    }
+    return dates;
+  });
+
+  const today = DateTime.now().startOf("day").toJSDate();
+
+  const nights =
+    range?.from && range?.to
+      ? Math.round(
+          DateTime.fromJSDate(range.to).diff(
+            DateTime.fromJSDate(range.from),
+            "days",
+          ).days,
+        )
+      : 0;
+
   const amenities = [
     { label: "WiFi", enabled: venue.meta.wifi, icon: <Wifi size={18} /> },
     {
@@ -139,13 +164,55 @@ export default function ListingDetailsClientPage({ venue }: { venue: Datum }) {
             Up to {venue.maxGuests} guests
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <CalendarDays size={16} />
-            {venue._count.bookings} booking
-            {venue._count.bookings !== 1 ? "s" : ""} so far
+          <div className="border-t pt-4">
+            <p className="text-sm font-medium mb-2">Select dates</p>
+            <Calendar
+              mode="range"
+              selected={range}
+              onSelect={setRange}
+              disabled={[{ before: today }, ...bookedDates]}
+              numberOfMonths={1}
+              className="rounded-md border w-full p-0"
+              locale={enUS}
+            />
           </div>
 
-          <button className="mt-2 cursor-pointer w-full rounded-lg bg-primary text-primary-foreground py-2.5 font-semibold hover:bg-primary/90 transition-colors">
+          {range?.from && (
+            <div className="text-sm text-muted-foreground flex flex-col gap-1">
+              <span>
+                Check-in:{" "}
+                <span className="font-medium text-foreground">
+                  {DateTime.fromJSDate(range.from).toLocaleString(
+                    DateTime.DATE_MED,
+                  )}
+                </span>
+              </span>
+              {range.to && (
+                <>
+                  <span>
+                    Check-out:{" "}
+                    <span className="font-medium text-foreground">
+                      {DateTime.fromJSDate(range.to).toLocaleString(
+                        DateTime.DATE_MED,
+                      )}
+                    </span>
+                  </span>
+                  <span>
+                    Total:{" "}
+                    <span className="font-medium text-foreground">
+                      {nights} night{nights !== 1 ? "s" : ""} ·{" "}
+                      {nights * venue.price} NOK
+                    </span>
+                  </span>
+                </>
+              )}
+            </div>
+          )}
+
+          <button
+            disabled={!range?.from || !range?.to}
+            className="mt-2 cursor-pointer w-full rounded-lg bg-primary text-primary-foreground py-2.5 font-semibold hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
             Book now
           </button>
         </aside>
