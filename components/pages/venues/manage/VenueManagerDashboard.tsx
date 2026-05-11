@@ -9,6 +9,7 @@ import {
 import type { Datum, DatumWithBookings } from "@/lib/types/apiTypes";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { DateTime } from "luxon";
 import {
   BookOpen,
   CalendarDays,
@@ -239,8 +240,13 @@ export default function VenueManagerDashboard() {
                             className="text-muted-foreground shrink-0"
                           />
                           <span>
-                            {new Date(b.dateFrom).toLocaleDateString()} →{" "}
-                            {new Date(b.dateTo).toLocaleDateString()}
+                            {DateTime.fromISO(b.dateFrom).toLocaleString(
+                              DateTime.DATE_MED,
+                            )}{" "}
+                            →{" "}
+                            {DateTime.fromISO(b.dateTo).toLocaleString(
+                              DateTime.DATE_MED,
+                            )}
                           </span>
                           <span className="flex items-center gap-1 text-muted-foreground">
                             <Users size={13} />
