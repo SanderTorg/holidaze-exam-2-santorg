@@ -30,6 +30,7 @@ export default function LoginPageClient() {
         accessToken: result.data.accessToken,
         venueManager: result.data.venueManager,
         avatar: result.data.avatar,
+        banner: result.data.banner,
       });
       toast.success("Login successful! Redirecting...");
       router.push("/");

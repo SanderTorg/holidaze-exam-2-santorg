@@ -6,19 +6,23 @@ export const dynamic = "force-dynamic";
 
 export default async function Venues() {
   const venues = await getAllVenues();
+  const hasVenues = venues.data.length > 0;
+
+  if (!hasVenues) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <h1 className="text-2xl font-bold">No venues found.</h1>
+      </div>
+    );
+  }
 
   return (
-    <div className="mx-auto max-w-lg px-4 py-8 sm:px-6 lg:px-8">
+    <div className="flex flex-col  ">
       <h1 className="pb-2 text-2xl font-bold">Venues</h1>
       <p className="pb-8 text-muted-foreground">
         Explore our curated selection of venues for your next unforgettable
         experience.
       </p>
-
-      <div>
-        <label htmlFor="searchbar">Search...</label>
-        <input type="text" id="searchbar" name="searchbar" />
-      </div>
 
       <Suspense fallback={<p>Loading venues...</p>}>
         <ListingsClient venues={venues.data} />

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+import LayoutClient from "@/components/layout/LayoutClient";
 import { Toaster } from "sonner";
 
 const inter = Inter({
@@ -32,16 +32,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable}  h-full antialiased`}>
-        <div className="min-h-full flex flex-col">
+    <html lang="en" data-scroll-behavior="smooth">
+      <body className={`${inter.variable} antialiased`}>
+        <div className="min-h-screen flex flex-col">
           <header>
             <Navbar />
           </header>
-          <main className="flex-1">{children}</main>
-          <footer>
-            <Footer />
-          </footer>
+          <LayoutClient>{children}</LayoutClient>
         </div>
         <Toaster position="top-center" />
       </body>

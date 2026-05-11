@@ -44,6 +44,47 @@ export interface DatumMeta {
   wifi: boolean;
 }
 
+export interface CreateVenueInput {
+  name: string;
+  description: string;
+  price: number;
+  maxGuests: number;
+  media?: { url: string; alt: string }[];
+  meta?: {
+    wifi?: boolean;
+    parking?: boolean;
+    breakfast?: boolean;
+    pets?: boolean;
+  };
+  location?: {
+    address?: string;
+    city?: string;
+    zip?: string;
+    country?: string;
+    continent?: string;
+    lat?: number;
+    lng?: number;
+  };
+}
+
+export interface Booking {
+  id: string;
+  dateFrom: string;
+  dateTo: string;
+  guests: number;
+  created: string;
+  updated: string;
+  customer?: {
+    name: string;
+    email: string;
+    avatar?: { url: string; alt: string };
+  };
+}
+
+export interface DatumWithBookings extends Datum {
+  bookings?: Booking[];
+}
+
 export interface RootObjectMeta {
   currentPage: number;
   isFirstPage: boolean;
