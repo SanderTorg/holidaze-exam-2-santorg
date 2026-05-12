@@ -35,9 +35,7 @@ export default function RootLayout({
     <html lang="en" data-scroll-behavior="smooth">
       <body className={`${inter.variable} antialiased`}>
         <div className="min-h-screen flex flex-col">
-          <header>
-            <Navbar />
-          </header>
+          <Navbar />
           <LayoutClient>{children}</LayoutClient>
         </div>
         <Toaster position="top-center" />

@@ -119,7 +119,13 @@ export default function ListingDetailsClientPage({
                     : "h-60"
                 }`}
               >
-                <Image src={m.url} alt={m.alt} fill className="object-cover" />
+                <Image
+                  src={m.url}
+                  alt={m.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover"
+                />
               </div>
             ))}
           </div>
