@@ -1,9 +1,9 @@
 export interface RootObject {
-  data: Datum[];
+  data: Venue[];
   meta: RootObjectMeta;
 }
 
-export interface Datum {
+export interface Venue {
   _count: Count;
   created: Date;
   description: string;
@@ -11,7 +11,7 @@ export interface Datum {
   location: Location;
   maxGuests: number;
   media: Media[];
-  meta: DatumMeta;
+  meta: VenueMeta;
   name: string;
   price: number;
   rating: number;
@@ -37,7 +37,7 @@ export interface Media {
   url: string;
 }
 
-export interface DatumMeta {
+export interface VenueMeta {
   breakfast: boolean;
   parking: boolean;
   pets: boolean;
@@ -81,8 +81,18 @@ export interface Booking {
   };
 }
 
-export interface DatumWithBookings extends Datum {
+export interface VenueWithBookings extends Venue {
   bookings?: Booking[];
+}
+
+export interface BookingWithVenue extends Booking {
+  venue?: {
+    id: string;
+    name: string;
+    price: number;
+    media: Media[];
+    location: Location;
+  };
 }
 
 export interface RootObjectMeta {

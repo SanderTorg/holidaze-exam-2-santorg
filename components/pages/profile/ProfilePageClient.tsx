@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { BadgeCheck, Pencil, User } from "lucide-react";
 import { toast } from "sonner";
-import VenueManagerDashboard from "@/components/pages/venues/manage/VenueManagerDashboard";
+import VenueManagerDashboard from "./manager/VenueManagerDashboard";
+import ViewBookingsClient from "./customer/ViewBookingsClient";
 
 export default function ProfilePageClient() {
   const router = useRouter();
@@ -199,24 +200,15 @@ export default function ProfilePageClient() {
             </div>
           </div>
         )}
-
-        {!venueManager && (
-          <div className="border rounded-xl p-6 flex flex-col gap-4">
-            <h2 className="font-semibold text-lg">My Bookings</h2>
-            <p className="text-sm text-muted-foreground">
-              View and manage your upcoming stays.
-            </p>
-            <button
-              onClick={() => router.push("/bookings")}
-              className="cursor-pointer self-start px-4 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              View my bookings
-            </button>
-          </div>
-        )}
       </div>
 
       {venueManager && <VenueManagerDashboard />}
+      {!venueManager && (
+        <div className="max-w-2xl mx-auto w-full px-4 pb-10">
+          <h2 className="text-xl font-semibold mb-4">My Bookings</h2>
+          <ViewBookingsClient />
+        </div>
+      )}
     </>
   );
 }

@@ -1,5 +1,5 @@
 export async function getAllVenues(): Promise<{
-  data: import("@/lib/types/apiTypes").Datum[];
+  data: import("@/lib/types/apiTypes").Venue[];
 }> {
   try {
     const res = await fetch(`${process.env.API_HOLIDAZE_VENUES_URL}`, {
@@ -15,7 +15,7 @@ export async function getAllVenues(): Promise<{
 
 export async function getVenueById(
   id: string,
-): Promise<import("@/lib/types/apiTypes").DatumWithBookings | null> {
+): Promise<import("@/lib/types/apiTypes").VenueWithBookings | null> {
   try {
     const res = await fetch(
       `${process.env.API_HOLIDAZE_VENUES_URL}/${id}?_bookings=true`,
@@ -31,7 +31,7 @@ export async function getVenueById(
 
 export async function searchVenues(
   query: string,
-): Promise<import("@/lib/types/apiTypes").Datum[]> {
+): Promise<import("@/lib/types/apiTypes").Venue[]> {
   try {
     const res = await fetch(
       `${process.env.API_HOLIDAZE_VENUES_URL}/search?q=${encodeURIComponent(query)}`,
