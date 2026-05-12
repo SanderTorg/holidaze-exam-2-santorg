@@ -6,27 +6,39 @@ import Link from "next/link";
 
 export default async function Home() {
   let popularVenues: Venue[] = [];
+  let featuredVenues: Venue[] = [];
   try {
-    const venuesResponse = await fetch(
-      `${process.env.API_HOLIDAZE_VENUES_URL}?limit=100&sort=rating&sortOrder=desc`,
-      {
-        headers: {
-          "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}`,
+    const [popularRes, featuredRes] = await Promise.all([
+      fetch(
+        `${process.env.API_HOLIDAZE_VENUES_URL}?limit=100&sort=rating&sortOrder=desc`,
+        {
+          headers: { "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}` },
+          cache: "no-store",
         },
-        cache: "no-store",
-      },
-    );
-    if (venuesResponse.ok) {
-      const venuesJson = await venuesResponse.json();
-      const venues: Venue[] = Array.isArray(venuesJson?.data)
-        ? venuesJson.data
-        : [];
+      ),
+      fetch(
+        `${process.env.API_HOLIDAZE_VENUES_URL}?limit=12&sort=created&sortOrder=desc`,
+        {
+          headers: { "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}` },
+          cache: "no-store",
+        },
+      ),
+    ]);
+
+    if (popularRes.ok) {
+      const json = await popularRes.json();
+      const venues: Venue[] = Array.isArray(json?.data) ? json.data : [];
       popularVenues = venues
         .sort((a, b) => (b.rating || 0) - (a.rating || 0))
         .slice(0, 10);
     }
+
+    if (featuredRes.ok) {
+      const json = await featuredRes.json();
+      featuredVenues = Array.isArray(json?.data) ? json.data.slice(0, 12) : [];
+    }
   } catch (error) {
-    console.error("Failed to fetch popular venues:", error);
+    console.error("Failed to fetch venues:", error);
   }
 
   return (
@@ -132,11 +144,80 @@ export default async function Home() {
       </section>
 
       <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Featured Venues
-          </h2>
-          <div></div>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-end justify-between mb-10">
+            <div>
+              <span className="inline-block text-sm font-semibold uppercase tracking-widest text-indigo-500 mb-2">
+                Just listed
+              </span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                Featured Venues
+              </h2>
+            </div>
+            <Link
+              href="/venues"
+              className="shrink-0 text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+            >
+              View More →
+            </Link>
+          </div>
+
+          {featuredVenues.length === 0 ? (
+            <p className="text-gray-500 text-center">
+              No venues available right now.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {featuredVenues.map((venue) => {
+                const image = venue.media?.[0];
+                return (
+                  <Link
+                    key={venue.id}
+                    href={`/venues/${venue.id}`}
+                    className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
+                  >
+                    <div className="relative h-44 w-full bg-gray-100">
+                      {image?.url ? (
+                        <Image
+                          src={image.url}
+                          alt={image.alt || venue.name}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-gray-300 text-sm">
+                          No image
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-semibold text-gray-900 truncate mb-1">
+                        {venue.name}
+                      </h3>
+                      <p className="text-sm text-gray-500 truncate mb-3">
+                        {[venue.location?.city, venue.location?.country]
+                          .filter(Boolean)
+                          .join(", ") || "Location unknown"}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-gray-900">
+                          ${venue.price}
+                          <span className="text-sm font-normal text-gray-500">
+                            {" "}
+                            /night
+                          </span>
+                        </span>
+                        <span className="flex items-center gap-1 text-sm text-amber-500 font-medium">
+                          ★ {venue.rating?.toFixed(1) ?? "—"}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
     </div>
