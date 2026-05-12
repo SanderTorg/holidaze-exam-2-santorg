@@ -8,13 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Datum } from "@/lib/types/apiTypes";
+import { Venue } from "@/lib/types/apiTypes";
 import { MapPin, Search, Star, Users } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
-export function ListingsClient({ venues }: { venues: Datum[] }) {
+export function ListingsClient({ venues }: { venues: Venue[] }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
 
