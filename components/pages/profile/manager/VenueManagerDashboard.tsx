@@ -6,7 +6,7 @@ import {
   getManagerVenuesAction,
   getVenueWithBookingsAction,
 } from "@/lib/actions/venueActions";
-import type { Datum, DatumWithBookings } from "@/lib/types/apiTypes";
+import type { Venue, VenueWithBookings } from "@/lib/types/apiTypes";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { DateTime } from "luxon";
@@ -28,13 +28,13 @@ type View = "list" | "create" | "edit";
 export default function VenueManagerDashboard() {
   const { name, accessToken, isLoggedIn, venueManager } = useUserStore();
 
-  const [venues, setVenues] = useState<Datum[]>([]);
+  const [venues, setVenues] = useState<Venue[]>([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<View>("list");
-  const [editingVenue, setEditingVenue] = useState<Datum | null>(null);
+  const [editingVenue, setEditingVenue] = useState<Venue | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [bookingsMap, setBookingsMap] = useState<
-    Record<string, DatumWithBookings>
+    Record<string, VenueWithBookings>
   >({});
   const [loadingBookingsId, setLoadingBookingsId] = useState<string | null>(
     null,
@@ -74,14 +74,14 @@ export default function VenueManagerDashboard() {
     setLoadingBookingsId(null);
   }
 
-  function handleEditSuccess(updated: Datum) {
+  function handleEditSuccess(updated: Venue) {
     setVenues((v) => v.map((x) => (x.id === updated.id ? updated : x)));
     setView("list");
     setEditingVenue(null);
     toast.success("Venue updated!");
   }
 
-  function handleCreateSuccess(created: Datum) {
+  function handleCreateSuccess(created: Venue) {
     setVenues((v) => [created, ...v]);
     setView("list");
     toast.success("Venue created!");

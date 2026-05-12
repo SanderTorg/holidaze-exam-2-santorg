@@ -1,14 +1,16 @@
 import type { RegisterFormData, RegisterResponse } from "../types/userTypes";
 import type {
+  Booking,
+  BookingWithVenue,
   CreateVenueInput,
-  Datum,
-  DatumWithBookings,
+  Venue,
+  VenueWithBookings,
 } from "../types/apiTypes";
 
 export async function createVenue(
   accessToken: string,
   venue: CreateVenueInput,
-): Promise<Datum> {
+): Promise<Venue> {
   const response = await fetch(`${process.env.API_HOLIDAZE_VENUES_URL}`, {
     method: "POST",
     headers: {
@@ -53,7 +55,11 @@ export async function deleteVenue(
 export async function updateProfile(
   name: string,
   accessToken: string,
-  data: { bio?: string; avatar?: { url: string; alt: string }; banner?: { url: string; alt: string } },
+  data: {
+    bio?: string;
+    avatar?: { url: string; alt: string };
+    banner?: { url: string; alt: string };
+  },
 ): Promise<{
   bio?: string;
   avatar?: { url: string; alt: string };
@@ -145,7 +151,7 @@ export async function loginUser(formData: {
 export async function getManagerVenues(
   name: string,
   accessToken: string,
-): Promise<Datum[]> {
+): Promise<Venue[]> {
   const response = await fetch(
     `${process.env.API_HOLIDAZE_PROFILES_URL}/${name}/venues`,
     {
@@ -164,7 +170,7 @@ export async function updateVenue(
   accessToken: string,
   id: string,
   venue: CreateVenueInput,
-): Promise<Datum> {
+): Promise<Venue> {
   const response = await fetch(`${process.env.API_HOLIDAZE_VENUES_URL}/${id}`, {
     method: "PUT",
     headers: {
@@ -186,7 +192,7 @@ export async function updateVenue(
 export async function getVenueWithBookings(
   accessToken: string,
   id: string,
-): Promise<DatumWithBookings | null> {
+): Promise<VenueWithBookings | null> {
   const response = await fetch(
     `${process.env.API_HOLIDAZE_VENUES_URL}/${id}?_bookings=true&_customer=true`,
     {
@@ -199,4 +205,47 @@ export async function getVenueWithBookings(
   const json = await response.json();
   if (!response.ok) return null;
   return json?.data ?? null;
+}
+
+export async function createBooking(
+  accessToken: string,
+  data: { dateFrom: string; dateTo: string; guests: number; venueId: string },
+): Promise<Booking> {
+  const response = await fetch(`${process.env.API_HOLIDAZE_BOOKINGS_URL}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+      "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    const message =
+      json?.errors?.[0]?.message ?? `Booking failed (${response.status})`;
+    throw new Error(message);
+  }
+
+  return json?.data;
+}
+
+export async function getProfileBookings(
+  name: string,
+  accessToken: string,
+): Promise<BookingWithVenue[]> {
+  const response = await fetch(
+    `${process.env.API_HOLIDAZE_PROFILES_URL}/${name}/bookings?_venue=true`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}`,
+      },
+    },
+  );
+  const json = await response.json();
+  if (!response.ok) return [];
+  return Array.isArray(json?.data) ? json.data : [];
 }

@@ -8,13 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Datum } from "@/lib/types/apiTypes";
+import { Venue } from "@/lib/types/apiTypes";
 import { MapPin, Search, Star, Users } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
-export function ListingsClient({ venues }: { venues: Datum[] }) {
+export function ListingsClient({ venues }: { venues: Venue[] }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
 
@@ -54,7 +54,7 @@ export function ListingsClient({ venues }: { venues: Datum[] }) {
       )}
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filtered.map((venue: Datum) => (
+        {filtered.map((venue: Venue) => (
           <Card
             key={venue.id}
             className="overflow-hidden flex flex-col shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer group p-0"

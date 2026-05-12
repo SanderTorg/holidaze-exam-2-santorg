@@ -6,13 +6,13 @@ import {
   createVenueAction,
   updateVenueAction,
 } from "@/lib/actions/venueActions";
-import type { Datum } from "@/lib/types/apiTypes";
+import type { Venue } from "@/lib/types/apiTypes";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
 
 interface Props {
-  initial?: Datum;
-  onSuccess: (venue: Datum) => void;
+  initial?: Venue;
+  onSuccess: (venue: Venue) => void;
   onCancel: () => void;
 }
 
