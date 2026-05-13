@@ -75,6 +75,7 @@ export default function ViewBookingsClient() {
                   src={booking.venue.media[0].url}
                   alt={booking.venue.media[0].alt || booking.venue?.name || ""}
                   fill
+                  sizes="112px"
                   className="object-cover"
                 />
               </div>

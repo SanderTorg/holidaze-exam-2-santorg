@@ -154,6 +154,7 @@ export default function VenueManagerDashboard() {
                     src={venue.media[0].url}
                     alt={venue.media[0].alt}
                     fill
+                    sizes="112px"
                     className="object-cover"
                   />
                 </div>

@@ -74,6 +74,7 @@ export default function ProfilePageClient() {
             src={banner.url}
             alt={banner.alt || "Profile banner"}
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />
@@ -88,6 +89,7 @@ export default function ProfilePageClient() {
                 src={avatar.url}
                 alt={avatar.alt || name}
                 fill
+                sizes="96px"
                 className="object-cover"
               />
             ) : (

@@ -59,6 +59,7 @@ export default function Navbar() {
                       src={avatar.url}
                       alt={avatar.alt ?? name}
                       fill
+                      sizes="36px"
                       className="object-cover cursor-pointer"
                     />
                   ) : (
