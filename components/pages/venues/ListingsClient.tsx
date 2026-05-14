@@ -14,42 +14,161 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
+type SortOption =
+  | "newest"
+  | "oldest"
+  | "az"
+  | "za"
+  | "price-high"
+  | "price-low";
+
+type FilterOption =
+  | "all"
+  | "popular"
+  | "top-rated"
+  | "budget"
+  | "pets"
+  | "breakfast"
+  | "parking"
+  | "wifi";
+
+const FILTER_OPTIONS: { value: FilterOption; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "popular", label: "Popular" },
+  { value: "top-rated", label: "Top Rated" },
+  { value: "budget", label: "Budget" },
+  { value: "pets", label: "Pets" },
+  { value: "breakfast", label: "Breakfast" },
+  { value: "parking", label: "Parking" },
+  { value: "wifi", label: "Wifi" },
+];
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: "newest", label: "Latest" },
+  { value: "oldest", label: "Oldest" },
+  { value: "az", label: "A → Z" },
+  { value: "za", label: "Z → A" },
+  { value: "price-high", label: "Price: High → Low" },
+  { value: "price-low", label: "Price: Low → High" },
+];
+
 export function ListingsClient({ venues }: { venues: Venue[] }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const [sort, setSort] = useState<SortOption>("newest");
+  const [filter, setFilter] = useState<FilterOption>("all");
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
-    if (!q) return venues.filter((v) => v.media.length > 0);
-    return venues.filter(
-      (v) =>
-        v.media.length > 0 &&
-        (v.name.toLowerCase().includes(q) ||
+    const base = venues.filter((v) => {
+      if (v.media.length === 0) return false;
+      if (
+        q &&
+        !(
+          v.name.toLowerCase().includes(q) ||
           v.description.toLowerCase().includes(q) ||
           v.location.city?.toLowerCase().includes(q) ||
-          v.location.country?.toLowerCase().includes(q)),
-    );
-  }, [query, venues]);
+          v.location.country?.toLowerCase().includes(q)
+        )
+      )
+        return false;
+      switch (filter) {
+        case "popular":
+          return v._count.bookings >= 3;
+        case "top-rated":
+          return v.rating >= 4;
+        case "budget":
+          return v.price <= 100;
+        case "pets":
+          return v.meta.pets;
+        case "breakfast":
+          return v.meta.breakfast;
+        case "parking":
+          return v.meta.parking;
+        case "wifi":
+          return v.meta.wifi;
+        default:
+          return true;
+      }
+    });
+
+    switch (sort) {
+      case "newest":
+        return [...base].sort(
+          (a, b) =>
+            new Date(b.created).getTime() - new Date(a.created).getTime(),
+        );
+      case "oldest":
+        return [...base].sort(
+          (a, b) =>
+            new Date(a.created).getTime() - new Date(b.created).getTime(),
+        );
+      case "az":
+        return [...base].sort((a, b) => a.name.localeCompare(b.name));
+      case "za":
+        return [...base].sort((a, b) => b.name.localeCompare(a.name));
+      case "price-high":
+        return [...base].sort((a, b) => b.price - a.price);
+      case "price-low":
+        return [...base].sort((a, b) => a.price - b.price);
+    }
+  }, [query, sort, filter, venues]);
 
   return (
-    <div>
-      <div className="relative mb-6 max-w-md">
-        <Search
-          size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-        />
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by name, city, country..."
-          className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
-        />
+    <>
+      <div className="flex flex-wrap justify-center gap-2 mb-4">
+        {FILTER_OPTIONS.map((f) => (
+          <button
+            key={f.value}
+            onClick={() => setFilter(f.value)}
+            className={`rounded-full px-4 py-1.5 text-sm font-medium border transition-colors ${
+              filter === f.value
+                ? "bg-foreground text-background border-foreground"
+                : "bg-background text-muted-foreground border-input hover:border-foreground hover:text-foreground"
+            }`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-col sm:flex-row justify-center w-full gap-3 mb-6">
+        <div className="relative flex-1 max-w-md">
+          <Search
+            size={16}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search by name, city, country..."
+            className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          />
+        </div>
+        <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value as SortOption)}
+          className="flex cursor-pointer rounded-md  border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
+        >
+          {SORT_OPTIONS.map((opt) => (
+            <option
+              key={opt.value}
+              value={opt.value}
+              className="cursor-pointer"
+            >
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       {filtered.length === 0 && (
         <p className="text-muted-foreground text-sm">
-          No venues match &ldquo;{query}&rdquo;.
+          {query
+            ? `No venues match "${query}".`
+            : filter !== "all"
+              ? `No venues match the "${FILTER_OPTIONS.find((f) => f.value === filter)?.label}" filter.`
+              : "No venues available right now."}
         </p>
       )}
 
@@ -132,6 +251,6 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
           </Card>
         ))}
       </section>
-    </div>
+    </>
   );
 }
