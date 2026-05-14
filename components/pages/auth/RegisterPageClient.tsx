@@ -14,8 +14,15 @@ export default function RegisterPageClient() {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: { venueManager: false },
+  });
+
+  const isVenueManager = watch("venueManager");
 
   async function onSubmit(values: FormData) {
     try {
@@ -38,6 +45,45 @@ export default function RegisterPageClient() {
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className="my-4 w-full">
+        <div className="flex flex-col pb-4">
+          <label className="block text-sm font-semibold mb-2">
+            Account type
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setValue("venueManager", false)}
+              className={`flex flex-col cursor-pointer items-center gap-1 rounded-xl border-2 px-4 py-3 text-sm font-medium transition-colors ${
+                !isVenueManager
+                  ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                  : "border-gray-200 text-gray-500 hover:border-gray-300"
+              }`}
+            >
+              <span className="text-xl">🧳</span>
+              Customer
+              <span className="text-xs font-normal text-gray-400">
+                Browse &amp; book venues
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setValue("venueManager", true)}
+              className={`flex flex-col cursor-pointer items-center gap-1 rounded-xl border-2 px-4 py-3 text-sm font-medium transition-colors ${
+                isVenueManager
+                  ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                  : "border-gray-200 text-gray-500 hover:border-gray-300"
+              }`}
+            >
+              <span className="text-xl">🏡</span>
+              Venue Manager
+              <span className="text-xs font-normal text-gray-400">
+                List &amp; manage venues
+              </span>
+            </button>
+          </div>
+          <input type="hidden" {...register("venueManager")} />
+        </div>
+
         <div className="flex flex-col pb-4">
           <label
             htmlFor="name"
@@ -95,21 +141,6 @@ export default function RegisterPageClient() {
               {errors.password.message}
             </p>
           )}
-        </div>
-
-        <div className="flex items-center gap-2 pb-4">
-          <input
-            {...register("venueManager")}
-            type="checkbox"
-            id="venueManager"
-            className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-          />
-          <label
-            htmlFor="venueManager"
-            className="text-sm font-medium text-gray-700"
-          >
-            Register as Venue Manager
-          </label>
         </div>
 
         <Button
