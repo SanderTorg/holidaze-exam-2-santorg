@@ -17,7 +17,7 @@ export default async function Venues() {
   }
 
   return (
-    <div className="flex flex-col  ">
+    <div className="flex flex-col justify-center items-center px-4">
       <h1 className="pb-2 text-2xl font-bold">Venues</h1>
       <p className="pb-8 text-muted-foreground">
         Explore our curated selection of venues for your next unforgettable
