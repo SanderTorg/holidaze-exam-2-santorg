@@ -3,6 +3,12 @@ export interface RootObject {
   meta: RootObjectMeta;
 }
 
+export interface VenueOwner {
+  name: string;
+  email: string;
+  avatar?: { url: string; alt: string };
+}
+
 export interface Venue {
   _count: Count;
   created: Date;
@@ -13,6 +19,7 @@ export interface Venue {
   media: Media[];
   meta: VenueMeta;
   name: string;
+  owner?: VenueOwner;
   price: number;
   rating: number;
   updated: Date;

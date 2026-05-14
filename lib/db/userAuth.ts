@@ -59,11 +59,13 @@ export async function updateProfile(
     bio?: string;
     avatar?: { url: string; alt: string };
     banner?: { url: string; alt: string };
+    venueManager?: boolean;
   },
 ): Promise<{
   bio?: string;
   avatar?: { url: string; alt: string };
   banner?: { url: string; alt: string };
+  venueManager?: boolean;
 }> {
   const response = await fetch(
     `${process.env.API_HOLIDAZE_PROFILES_URL}/${name}`,

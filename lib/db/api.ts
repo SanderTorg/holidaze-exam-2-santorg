@@ -18,7 +18,7 @@ export async function getVenueById(
 ): Promise<import("@/lib/types/apiTypes").VenueWithBookings | null> {
   try {
     const res = await fetch(
-      `${process.env.API_HOLIDAZE_VENUES_URL}/${id}?_bookings=true`,
+      `${process.env.API_HOLIDAZE_VENUES_URL}/${id}?_bookings=true&_owner=true`,
       { next: { revalidate: 60 } },
     );
     if (!res.ok) return null;

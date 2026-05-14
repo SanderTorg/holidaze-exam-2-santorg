@@ -29,7 +29,9 @@ export default function ProfilePageClient() {
   const [bannerUrl, setBannerUrl] = useState(banner?.url ?? "");
   const [bannerAlt, setBannerAlt] = useState(banner?.alt ?? "");
   const [bio, setBio] = useState("");
+  const [roleIsManager, setRoleIsManager] = useState(venueManager);
   const [saving, setSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState<"venues" | "bookings">("venues");
 
   useEffect(() => {
     if (!isLoggedIn) router.replace("/login");
@@ -48,12 +50,13 @@ export default function ProfilePageClient() {
         banner: bannerUrl
           ? { url: bannerUrl, alt: bannerAlt || name }
           : undefined,
+        venueManager: roleIsManager,
       });
       setUser({
         name,
         email,
         accessToken,
-        venueManager,
+        venueManager: updated.venueManager ?? roleIsManager,
         avatar: updated.avatar ?? avatar,
         banner: updated.banner ?? banner,
       });
@@ -175,6 +178,36 @@ export default function ProfilePageClient() {
             </div>
 
             <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium">Account type</label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRoleIsManager(false)}
+                  className={`flex flex-col cursor-pointer items-center gap-1 rounded-xl border-2 px-4 py-3 text-sm font-medium transition-colors ${
+                    !roleIsManager
+                      ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                      : "border-gray-200 text-gray-500 hover:border-gray-300"
+                  }`}
+                >
+                  <span className="text-xl">🧳</span>
+                  Customer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRoleIsManager(true)}
+                  className={`flex flex-col cursor-pointer items-center gap-1 rounded-xl border-2 px-4 py-3 text-sm font-medium transition-colors ${
+                    roleIsManager
+                      ? "border-indigo-500 bg-indigo-50 text-indigo-700"
+                      : "border-gray-200 text-gray-500 hover:border-gray-300"
+                  }`}
+                >
+                  <span className="text-xl">🏡</span>
+                  Venue Manager
+                </button>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium">Bio</label>
               <textarea
                 value={bio}
@@ -188,14 +221,14 @@ export default function ProfilePageClient() {
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setEditing(false)}
-                className="px-4 py-2 text-sm rounded-lg border hover:bg-muted transition-colors"
+                className="px-4 py-2 cursor-pointer text-sm rounded-lg border hover:bg-muted transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="px-4 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
+                className="px-4 py-2 cursor-pointer text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
               >
                 {saving ? "Saving..." : "Save changes"}
               </button>
@@ -204,7 +237,34 @@ export default function ProfilePageClient() {
         )}
       </div>
 
-      {venueManager && <VenueManagerDashboard />}
+      {venueManager && (
+        <div className="max-w-5xl mx-auto w-full px-4 pb-10">
+          <div className="flex gap-2 mb-6 border-b">
+            <button
+              onClick={() => setActiveTab("venues")}
+              className={`cursor-pointer px-5 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === "venues"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              My Venues
+            </button>
+            <button
+              onClick={() => setActiveTab("bookings")}
+              className={`cursor-pointer px-5 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === "bookings"
+                  ? "border-primary text-primary"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              My Bookings
+            </button>
+          </div>
+          {activeTab === "venues" && <VenueManagerDashboard />}
+          {activeTab === "bookings" && <ViewBookingsClient />}
+        </div>
+      )}
       {!venueManager && (
         <div className="max-w-2xl mx-auto w-full px-4 pb-10">
           <h2 className="text-xl font-semibold mb-4">My Bookings</h2>

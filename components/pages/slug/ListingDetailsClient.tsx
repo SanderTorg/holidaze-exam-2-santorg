@@ -3,6 +3,7 @@
 import { VenueWithBookings } from "@/lib/types/apiTypes";
 import { Car, Coffee, Dog, MapPin, Star, Users, Wifi } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
@@ -20,7 +21,15 @@ export default function ListingDetailsClientPage({
   const [range, setRange] = useState<DateRange | undefined>();
   const [guests, setGuests] = useState(1);
   const [isBooking, setIsBooking] = useState(false);
-  const { accessToken, isLoggedIn } = useUserStore();
+  const {
+    accessToken,
+    isLoggedIn,
+    venueManager,
+    name: userName,
+  } = useUserStore();
+
+  const isOwnVenue =
+    venueManager && !!venue.owner && venue.owner.name === userName;
 
   async function handleBook() {
     if (!range?.from || !range?.to || !accessToken) return;
@@ -269,13 +278,33 @@ export default function ListingDetailsClientPage({
             </p>
           )}
 
-          <button
-            disabled={!range?.from || !range?.to || !isLoggedIn || isBooking}
-            onClick={handleBook}
-            className="mt-2 cursor-pointer w-full rounded-lg bg-primary text-primary-foreground py-2.5 font-semibold hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            {isBooking ? "Booking..." : "Book now"}
-          </button>
+          {isOwnVenue ? (
+            <div className="mt-2 flex flex-col gap-2">
+              <p className="text-sm text-center text-muted-foreground border rounded-lg py-2 px-3 bg-muted">
+                This is your venue.
+              </p>
+              <Link
+                href="/profile"
+                className="w-full text-center rounded-lg border py-2 text-sm font-medium hover:bg-muted transition-colors"
+              >
+                View bookings
+              </Link>
+              <Link
+                href="/profile"
+                className="w-full text-center rounded-lg border py-2 text-sm font-medium hover:bg-muted transition-colors"
+              >
+                My venues
+              </Link>
+            </div>
+          ) : (
+            <button
+              disabled={!range?.from || !range?.to || !isLoggedIn || isBooking}
+              onClick={handleBook}
+              className="mt-2 cursor-pointer w-full rounded-lg bg-primary text-primary-foreground py-2.5 font-semibold hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {isBooking ? "Booking..." : "Book now"}
+            </button>
+          )}
         </aside>
       </div>
     </div>
