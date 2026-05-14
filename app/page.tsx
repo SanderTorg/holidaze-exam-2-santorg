@@ -1,4 +1,5 @@
 import CarouselComponent from "@/components/pages/home/Carousel";
+import NewsletterSection from "@/components/pages/home/NewsletterSection";
 import { Suspense } from "react";
 import type { Venue } from "@/lib/types/apiTypes";
 import Image from "next/image";
@@ -220,6 +221,8 @@ export default async function Home() {
           )}
         </div>
       </section>
+
+      <NewsletterSection />
     </div>
   );
 }
