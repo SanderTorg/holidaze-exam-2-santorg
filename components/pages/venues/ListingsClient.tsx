@@ -14,25 +14,16 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
-type SortOption =
-  | "newest"
-  | "oldest"
-  | "az"
-  | "za"
-  | "price-high"
-  | "price-low";
+enum SortOption {
+  Newest = "newest",
+  Oldest = "oldest",
+  AZ = "az",
+  ZA = "za",
+  PriceHigh = "price-high",
+  PriceLow = "price-low",
+}
 
-type FilterOption =
-  | "all"
-  | "popular"
-  | "top-rated"
-  | "budget"
-  | "pets"
-  | "breakfast"
-  | "parking"
-  | "wifi";
-
-const FILTER_OPTIONS: { value: FilterOption; label: string }[] = [
+const FILTER_OPTIONS = [
   { value: "all", label: "All" },
   { value: "popular", label: "Popular" },
   { value: "top-rated", label: "Top Rated" },
@@ -41,21 +32,23 @@ const FILTER_OPTIONS: { value: FilterOption; label: string }[] = [
   { value: "breakfast", label: "Breakfast" },
   { value: "parking", label: "Parking" },
   { value: "wifi", label: "Wifi" },
-];
+] as const;
+
+type FilterOption = (typeof FILTER_OPTIONS)[number]["value"];
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: "newest", label: "Latest" },
-  { value: "oldest", label: "Oldest" },
-  { value: "az", label: "A → Z" },
-  { value: "za", label: "Z → A" },
-  { value: "price-high", label: "Price: High → Low" },
-  { value: "price-low", label: "Price: Low → High" },
+  { value: SortOption.Newest, label: "Latest" },
+  { value: SortOption.Oldest, label: "Oldest" },
+  { value: SortOption.AZ, label: "A → Z" },
+  { value: SortOption.ZA, label: "Z → A" },
+  { value: SortOption.PriceHigh, label: "Price: High → Low" },
+  { value: SortOption.PriceLow, label: "Price: Low → High" },
 ];
 
 export function ListingsClient({ venues }: { venues: Venue[] }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState<SortOption>("newest");
+  const [sort, setSort] = useState<SortOption>(SortOption.Newest);
   const [filter, setFilter] = useState<FilterOption>("all");
 
   const filtered = useMemo(() => {
@@ -93,24 +86,26 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
     });
 
     switch (sort) {
-      case "newest":
+      case SortOption.Newest:
         return [...base].sort(
           (a, b) =>
             new Date(b.created).getTime() - new Date(a.created).getTime(),
         );
-      case "oldest":
+      case SortOption.Oldest:
         return [...base].sort(
           (a, b) =>
             new Date(a.created).getTime() - new Date(b.created).getTime(),
         );
-      case "az":
+      case SortOption.AZ:
         return [...base].sort((a, b) => a.name.localeCompare(b.name));
-      case "za":
+      case SortOption.ZA:
         return [...base].sort((a, b) => b.name.localeCompare(a.name));
-      case "price-high":
+      case SortOption.PriceHigh:
         return [...base].sort((a, b) => b.price - a.price);
-      case "price-low":
+      case SortOption.PriceLow:
         return [...base].sort((a, b) => a.price - b.price);
+      default:
+        return base;
     }
   }, [query, sort, filter, venues]);
 
