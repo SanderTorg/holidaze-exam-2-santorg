@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   test: {
     environment: "jsdom",
+    setupFiles: ["vitest-localstorage-mock"],
     include: ["**/*.test.ts", "**/*.test.tsx"],
     exclude: ["tests/**", "node_modules/**", "dist/**"],
   },
