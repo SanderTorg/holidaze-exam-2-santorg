@@ -50,7 +50,7 @@ test.describe("Venue Manager user story", () => {
       );
     await createVenueBtn.first().click();
 
-    await expect(page.getByLabel(/venue name|name/i).first()).toBeVisible({
+    await expect(page.getByPlaceholder(/my awesome cabin/i)).toBeVisible({
       timeout: 8000,
     });
   });
