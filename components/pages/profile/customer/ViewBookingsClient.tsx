@@ -11,16 +11,15 @@ import { CalendarDays, MapPin, Users } from "lucide-react";
 export default function ViewBookingsClient() {
   const { name, accessToken, isLoggedIn } = useUserStore();
   const [bookings, setBookings] = useState<BookingWithVenue[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(isLoggedIn && !!name && !!accessToken);
 
   useEffect(() => {
     if (!isLoggedIn || !name || !accessToken) {
-      setLoading(false);
       return;
     }
     async function load() {
       const data = await getProfileBookingsAction(name!, accessToken!);
-      // sort upcoming first
+
       setBookings(
         data.sort(
           (a, b) =>
