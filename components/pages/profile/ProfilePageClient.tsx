@@ -78,7 +78,7 @@ export default function ProfilePageClient() {
             alt={banner.alt || "Profile banner"}
             fill
             sizes="100vw"
-            className="object-cover"
+            style={{ objectFit: "cover" }}
             priority
           />
         )}
@@ -93,7 +93,7 @@ export default function ProfilePageClient() {
                 alt={avatar.alt || name}
                 fill
                 sizes="96px"
-                className="object-cover"
+                style={{ objectFit: "cover" }}
               />
             ) : (
               <User size={40} className="text-muted-foreground" />

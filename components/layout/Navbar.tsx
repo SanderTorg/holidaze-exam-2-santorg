@@ -60,7 +60,8 @@ export default function Navbar() {
                       alt={avatar.alt ?? name}
                       fill
                       sizes="36px"
-                      className="object-cover cursor-pointer"
+                      style={{ objectFit: "cover" }}
+                      className="cursor-pointer"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-muted">
@@ -122,7 +123,8 @@ export default function Navbar() {
                       alt={avatar.alt ?? name}
                       fill
                       sizes="36px"
-                      className="object-cover cursor-pointer"
+                      style={{ objectFit: "cover" }}
+                      className="cursor-pointer"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-muted">

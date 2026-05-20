@@ -16,7 +16,7 @@ export default function BackgroundAuthClient({ children }: LoginProps) {
           fill
           sizes="100vw"
           loading="eager"
-          className="object-cover"
+          style={{ objectFit: "cover" }}
         />
       </div>
       {children}

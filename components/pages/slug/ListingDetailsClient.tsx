@@ -134,7 +134,7 @@ export default function ListingDetailsClientPage({
                   alt={m.alt}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover"
+                  style={{ objectFit: "cover" }}
                 />
               </div>
             ))}

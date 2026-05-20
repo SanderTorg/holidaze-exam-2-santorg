@@ -13,6 +13,15 @@ import { MapPin, Search, Star, Users } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 enum SortOption {
   Newest = "newest",
@@ -45,11 +54,33 @@ const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: SortOption.PriceLow, label: "Price: Low → High" },
 ];
 
+const ITEMS_PER_PAGE = 12;
+
+function getPageNumbers(
+  current: number,
+  total: number,
+): (number | "ellipsis")[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages: (number | "ellipsis")[] = [1];
+  if (current > 3) pages.push("ellipsis");
+  for (
+    let i = Math.max(2, current - 1);
+    i <= Math.min(total - 1, current + 1);
+    i++
+  ) {
+    pages.push(i);
+  }
+  if (current < total - 2) pages.push("ellipsis");
+  pages.push(total);
+  return pages;
+}
+
 export function ListingsClient({ venues }: { venues: Venue[] }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortOption>(SortOption.Newest);
   const [filter, setFilter] = useState<FilterOption>("all");
+  const [page, setPage] = useState(1);
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim();
@@ -109,13 +140,19 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
     }
   }, [query, sort, filter, venues]);
 
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const paginated = filtered.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE,
+  );
+
   return (
     <>
       <div className="flex flex-wrap justify-center gap-2 mb-4">
         {FILTER_OPTIONS.map((f) => (
           <button
             key={f.value}
-            onClick={() => setFilter(f.value)}
+            onClick={() => { setFilter(f.value); setPage(1); }}
             className={`rounded-full px-4 py-1.5 text-sm font-medium border transition-colors ${
               filter === f.value
                 ? "bg-foreground text-background border-foreground"
@@ -135,14 +172,14 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => { setQuery(e.target.value); setPage(1); }}
             placeholder="Search by name, city, country..."
             className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
         <select
           value={sort}
-          onChange={(e) => setSort(e.target.value as SortOption)}
+          onChange={(e) => { setSort(e.target.value as SortOption); setPage(1); }}
           className="flex cursor-pointer rounded-md  border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
         >
           {SORT_OPTIONS.map((opt) => (
@@ -168,7 +205,7 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
       )}
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filtered.map((venue: Venue) => (
+        {paginated.map((venue: Venue) => (
           <Card
             key={venue.id}
             className="overflow-hidden flex flex-col shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer group p-0"
@@ -178,10 +215,10 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
               <Image
                 src={venue.media[0].url}
                 alt={venue.media[0].alt}
-                width={0}
-                height={0}
-                sizes="100vw"
-                className="object-cover w-full h-auto group-hover:scale-105 transition-transform duration-300"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                style={{ objectFit: "cover" }}
+                className="group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute top-3 left-3 bg-black/70 text-white text-sm font-semibold px-2 py-1 rounded-full">
                 {venue.price} NOK / night
@@ -245,6 +282,59 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
           </Card>
         ))}
       </section>
+
+      {totalPages > 1 && (
+        <Pagination className="pt-8">
+          <PaginationContent className="justify-center flex-wrap">
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage((p) => Math.max(1, p - 1));
+                }}
+                aria-disabled={page === 1}
+                className={page === 1 ? "pointer-events-none opacity-50" : ""}
+              />
+            </PaginationItem>
+
+            {getPageNumbers(page, totalPages).map((item, idx) =>
+              item === "ellipsis" ? (
+                <PaginationItem key={`ellipsis-${idx}`}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              ) : (
+                <PaginationItem key={item}>
+                  <PaginationLink
+                    href="#"
+                    isActive={item === page}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPage(item);
+                    }}
+                  >
+                    {item}
+                  </PaginationLink>
+                </PaginationItem>
+              ),
+            )}
+
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage((p) => Math.min(totalPages, p + 1));
+                }}
+                aria-disabled={page === totalPages}
+                className={
+                  page === totalPages ? "pointer-events-none opacity-50" : ""
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </>
   );
 }

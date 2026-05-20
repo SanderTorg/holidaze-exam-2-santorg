@@ -155,7 +155,7 @@ export default function VenueManagerDashboard() {
                     alt={venue.media[0].alt}
                     fill
                     sizes="112px"
-                    className="object-cover"
+                    style={{ objectFit: "cover" }}
                   />
                 </div>
               )}

@@ -46,11 +46,11 @@ export default async function Home() {
     <div className="flex flex-col">
       <section className="relative h-[90vh] w-full overflow-hidden">
         <Image
-          src="/images/authBackground-jpeg.jpg"
+          src="/images/hero-hotel.svg"
           alt="Holidaze hero background"
           fill
           priority
-          className="object-cover object-center"
+          style={{ objectFit: "cover", objectPosition: "center" }}
           sizes="100vw"
         />
         <div className="absolute inset-0 bg-black/45" />
@@ -183,8 +183,9 @@ export default async function Home() {
                           src={image.url}
                           alt={image.alt || venue.name}
                           fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                          style={{ objectFit: "cover" }}
+                          className="group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center text-gray-300 text-sm">
