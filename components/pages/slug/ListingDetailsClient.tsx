@@ -2,7 +2,7 @@
 
 import { VenueWithBookings } from "@/lib/types/apiTypes";
 import { Car, Coffee, Dog, MapPin, Star, Users, Wifi } from "lucide-react";
-import Image from "next/image";
+
 import Link from "next/link";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
@@ -12,6 +12,7 @@ import { enUS } from "date-fns/locale";
 import { useUserStore } from "@/lib/hooks/useUserStore";
 import { createBookingAction } from "@/lib/actions/bookingActions";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export default function ListingDetailsClientPage({
   venue,
