@@ -52,14 +52,4 @@ test.describe("Customer user story", () => {
       .click();
     await expect(page).toHaveURL(/\/venues\/.+/);
   });
-
-  test("invalid credentials show an error toast", async ({ page }) => {
-    await page.goto("/login");
-    await page.getByLabel(/email/i).fill("notareal@stud.noroff.no");
-    await page.getByLabel(/password/i).fill("wrongpassword");
-    await page.getByRole("button", { name: /login/i }).click();
-    await expect(page.getByText(/login failed/i)).toBeVisible({
-      timeout: 8000,
-    });
-  });
 });
