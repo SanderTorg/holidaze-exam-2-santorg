@@ -75,7 +75,7 @@ export default function ViewBookingsClient() {
                   alt={booking.venue.media[0].alt || booking.venue?.name || ""}
                   fill
                   sizes="112px"
-                  className="object-cover"
+                  style={{ objectFit: "cover" }}
                 />
               </div>
             ) : (

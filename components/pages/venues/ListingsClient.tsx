@@ -178,10 +178,10 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
               <Image
                 src={venue.media[0].url}
                 alt={venue.media[0].alt}
-                width={0}
-                height={0}
+                fill
                 sizes="100vw"
-                className="object-cover w-full h-auto group-hover:scale-105 transition-transform duration-300"
+                style={{ objectFit: 'cover' }}
+                className="group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute top-3 left-3 bg-black/70 text-white text-sm font-semibold px-2 py-1 rounded-full">
                 {venue.price} NOK / night
