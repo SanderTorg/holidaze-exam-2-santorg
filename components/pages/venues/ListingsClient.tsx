@@ -181,7 +181,6 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
                 width={0}
                 height={0}
                 sizes="100vw"
-                objectFit="cover"
                 className="object-cover w-full h-auto group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute top-3 left-3 bg-black/70 text-white text-sm font-semibold px-2 py-1 rounded-full">

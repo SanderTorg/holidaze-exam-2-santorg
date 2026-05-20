@@ -1,9 +1,9 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master, staging ]
+    branches: [main, master, staging]
   pull_request:
-    branches: [ main, master, staging ]
+    branches: [main, master, staging]
 jobs:
   test:
     timeout-minutes: 60
@@ -17,6 +17,10 @@ jobs:
       LOCAL_BASE_URL: ${{secrets.LOCAL_BASE_URL}}
       NOROFF_API_KEY: ${{secrets.NOROFF_API_KEY}}
       VERCEL_DEPLOYMENT_URL: ${{secrets.VERCEL_DEPLOYMENT_URL}}
+      TEST_CUSTOMER_EMAIL: ${{secrets.TEST_CUSTOMER_EMAIL}}
+      TEST_CUSTOMER_PASSWORD: ${{secrets.TEST_CUSTOMER_PASSWORD}}
+      TEST_MANAGER_EMAIL: ${{secrets.TEST_MANAGER_EMAIL}}
+      TEST_MANAGER_PASSWORD: ${{secrets.TEST_MANAGER_PASSWORD}}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
