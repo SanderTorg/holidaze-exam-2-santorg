@@ -56,6 +56,7 @@ export interface CreateVenueInput {
   description: string;
   price: number;
   maxGuests: number;
+  rating?: number;
   media?: { url: string; alt: string }[];
   meta?: {
     wifi?: boolean;
