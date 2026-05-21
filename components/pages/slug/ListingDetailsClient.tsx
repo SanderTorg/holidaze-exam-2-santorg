@@ -103,7 +103,7 @@ export default function ListingDetailsClientPage({
               className={
                 i < Math.round(venue.rating)
                   ? "fill-yellow-400 text-yellow-400"
-                  : "fill-muted text-muted"
+                  : "fill-none text-gray-300"
               }
             />
           ))}

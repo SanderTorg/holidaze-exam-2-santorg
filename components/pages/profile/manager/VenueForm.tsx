@@ -8,7 +8,7 @@ import {
 } from "@/lib/actions/venueActions";
 import type { Venue } from "@/lib/types/apiTypes";
 import { toast } from "sonner";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Star } from "lucide-react";
 
 interface Props {
   initial?: Venue;
@@ -29,6 +29,7 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
     description: initial?.description ?? "",
     price: initial?.price?.toString() ?? "",
     maxGuests: initial?.maxGuests?.toString() ?? "",
+    rating: initial?.rating ?? 0,
     mediaUrl: initial?.media[0]?.url ?? "",
     mediaAlt: initial?.media[0]?.alt ?? "",
     wifi: initial?.meta.wifi ?? false,
@@ -59,6 +60,7 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
         description: form.description,
         price: Number(form.price),
         maxGuests: Number(form.maxGuests),
+        rating: form.rating || undefined,
         media: form.mediaUrl
           ? [{ url: form.mediaUrl, alt: form.mediaAlt || form.name }]
           : [],
@@ -150,6 +152,34 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
                 className={inputClass}
                 placeholder="4"
               />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className={labelClass}>Rating</label>
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() =>
+                    setForm((f) => ({
+                      ...f,
+                      rating: f.rating === star ? 0 : star,
+                    }))
+                  }
+                  className="cursor-pointer focus:outline-none"
+                >
+                  <Star
+                    size={26}
+                    className={
+                      star <= form.rating
+                        ? "fill-yellow-400 text-yellow-400 transition-colors"
+                        : "text-muted-foreground transition-colors"
+                    }
+                  />
+                </button>
+              ))}
             </div>
           </div>
         </div>
@@ -257,7 +287,7 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
           <button
             type="submit"
             disabled={saving}
-            className="px-4 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
+            className="cursor-pointer px-4 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
           >
             {saving ? "Saving..." : initial ? "Save Changes" : "Create Venue"}
           </button>

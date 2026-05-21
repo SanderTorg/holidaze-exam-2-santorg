@@ -2,12 +2,34 @@ export async function getAllVenues(): Promise<{
   data: import("@/lib/types/apiTypes").Venue[];
 }> {
   try {
-    const res = await fetch(`${process.env.API_HOLIDAZE_VENUES_URL}`, {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) return { data: [] };
-    const json = await res.json();
-    return { data: Array.isArray(json?.data) ? json.data : [] };
+    const ressponse = await fetch(
+      `${process.env.API_HOLIDAZE_VENUES_URL}?limit=100&page=1`,
+      { cache: "no-store" },
+    );
+    if (!ressponse.ok) return { data: [] };
+    const { data: venuesData, meta } = await ressponse.json();
+    const venues: import("@/lib/types/apiTypes").Venue[] = Array.isArray(
+      venuesData,
+    )
+      ? venuesData
+      : [];
+    const pageCount: number = meta?.pageCount ?? 1;
+
+    if (pageCount > 1) {
+      const rest = await Promise.all(
+        Array.from({ length: pageCount - 1 }, (_, i) =>
+          fetch(
+            `${process.env.API_HOLIDAZE_VENUES_URL}?limit=100&page=${i + 2}`,
+            { cache: "no-store" },
+          ).then((r) => r.json()),
+        ),
+      );
+      for (const json of rest) {
+        if (Array.isArray(json?.data)) venues.push(...json.data);
+      }
+    }
+
+    return { data: venues };
   } catch {
     return { data: [] };
   }
