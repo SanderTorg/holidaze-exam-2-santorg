@@ -1,4 +1,5 @@
 import ListingDetailsClientPage from "@/components/pages/slug/ListingDetailsClient";
+import { ListingDetailsSkeleton } from "@/components/pages/slug/ListingDetailsSkeleton";
 import { getVenueById } from "@/lib/db/api";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -14,7 +15,7 @@ export default async function DetailsPage({
   if (!venue) return notFound();
 
   return (
-    <Suspense fallback={<p>Loading listing details...</p>}>
+    <Suspense fallback={<ListingDetailsSkeleton />}>
       <ListingDetailsClientPage venue={venue} />
     </Suspense>
   );

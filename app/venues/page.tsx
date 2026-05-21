@@ -1,4 +1,5 @@
 import { ListingsClient } from "@/components/pages/venues/ListingsClient";
+import { VenueGridSkeleton } from "@/components/pages/venues/VenueCardSkeleton";
 import { getAllVenues } from "@/lib/db/api";
 import { Suspense } from "react";
 
@@ -24,7 +25,7 @@ export default async function Venues() {
         experience.
       </p>
 
-      <Suspense fallback={<p>Loading venues...</p>}>
+      <Suspense fallback={<VenueGridSkeleton count={12} />}>
         <ListingsClient venues={venues.data} />
       </Suspense>
     </div>
