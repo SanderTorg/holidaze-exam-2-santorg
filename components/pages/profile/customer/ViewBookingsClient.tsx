@@ -16,7 +16,7 @@ import { CalendarDays, MapPin, Pencil, Trash2, Users } from "lucide-react";
 import { toast } from "sonner";
 import { Calendar } from "@/components/ui/calendar";
 import { DateRange } from "react-day-picker";
-import { enUS } from "date-fns/locale";
+
 import { Button } from "@/components/ui/button";
 
 export default function ViewBookingsClient() {
@@ -24,7 +24,6 @@ export default function ViewBookingsClient() {
   const [bookings, setBookings] = useState<BookingWithVenue[]>([]);
   const [loading, setLoading] = useState(isLoggedIn && !!name && !!accessToken);
 
-  // per-card state
   const [cancelingId, setCancelingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -168,7 +167,6 @@ export default function ViewBookingsClient() {
             key={booking.id}
             className={`rounded-xl border overflow-hidden ${isPast ? "opacity-60" : ""}`}
           >
-            {/* Card body */}
             <div className="flex flex-col sm:flex-row gap-4 p-4">
               {booking.venue?.media?.[0] ? (
                 <Link
@@ -244,7 +242,6 @@ export default function ViewBookingsClient() {
                   </p>
                 )}
 
-                {/* Actions — only for upcoming bookings */}
                 {!isPast && (
                   <div className="flex flex-wrap items-center gap-2 mt-2">
                     <Button
@@ -298,7 +295,6 @@ export default function ViewBookingsClient() {
               </div>
             </div>
 
-            {/* Inline edit panel */}
             {isEditing && (
               <div className="border-t bg-muted/30 px-4 py-4 flex flex-col gap-4">
                 <p className="text-sm font-medium">Edit booking</p>
@@ -309,13 +305,11 @@ export default function ViewBookingsClient() {
                     selected={editRange}
                     onSelect={setEditRange}
                     disabled={{ before: today }}
-                    locale={enUS}
                     numberOfMonths={1}
                     className="rounded-lg border bg-background"
                   />
 
                   <div className="flex flex-col gap-4">
-                    {/* Guest counter */}
                     <div className="flex flex-col gap-1">
                       <label className="text-xs font-medium text-muted-foreground">
                         Guests (max {maxGuests})
@@ -348,8 +342,6 @@ export default function ViewBookingsClient() {
                         </Button>
                       </div>
                     </div>
-
-                    {/* Summary */}
                     {editRange?.from && editRange?.to && (
                       <div className="text-xs text-muted-foreground flex flex-col gap-0.5">
                         <span>
@@ -369,7 +361,6 @@ export default function ViewBookingsClient() {
                         </span>
                       </div>
                     )}
-
                     <div className="flex gap-2 mt-auto">
                       <Button
                         size="sm"

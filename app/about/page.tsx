@@ -42,7 +42,6 @@ const team = [
 export default function About() {
   return (
     <div className="min-h-screen">
-      {/* Hero */}
       <section className="bg-muted/40 border-b">
         <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 text-center">
           <span className="inline-block text-5xl mb-5">🌅</span>
@@ -57,7 +56,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Stats */}
       <section className="border-b">
         <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
@@ -71,14 +69,13 @@ export default function About() {
         </div>
       </section>
 
-      {/* Our story */}
       <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div>
           <h2 className="text-3xl font-bold mb-4">Our story</h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
             Holidaze started in 2019 when two friends — tired of overpriced
-            hotel rooms and impersonal stays — decided to build something better.
-            They wanted a place where travellers could find authentic,
+            hotel rooms and impersonal stays — decided to build something
+            better. They wanted a place where travellers could find authentic,
             well-priced accommodations and where hosts could share their spaces
             with the world.
           </p>
@@ -99,7 +96,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Values */}
       <section className="bg-muted/30 border-y">
         <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
           <h2 className="text-3xl font-bold text-center mb-10">

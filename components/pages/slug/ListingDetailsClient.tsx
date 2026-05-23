@@ -10,7 +10,6 @@ import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { DateTime } from "luxon";
-import { enUS } from "date-fns/locale";
 import { useUserStore } from "@/lib/hooks/useUserStore";
 import { createBookingAction } from "@/lib/actions/bookingActions";
 import { toast } from "sonner";
@@ -224,7 +223,6 @@ export default function ListingDetailsClientPage({
               disabled={[{ before: today }, ...bookedDates]}
               numberOfMonths={1}
               className="rounded-md border w-full p-0"
-              locale={enUS}
             />
           </div>
 
