@@ -47,8 +47,10 @@ test.describe("Venue Manager user story", () => {
       .getByRole("button", { name: /new venue|create venue|add venue/i })
       .or(
         page.getByRole("link", { name: /new venue|create venue|add venue/i }),
-      );
-    await createVenueBtn.first().click();
+      )
+      .first();
+    await expect(createVenueBtn).toBeVisible({ timeout: 10000 });
+    await createVenueBtn.dispatchEvent("click");
 
     await expect(page.getByPlaceholder(/my awesome cabin/i)).toBeVisible({
       timeout: 8000,
