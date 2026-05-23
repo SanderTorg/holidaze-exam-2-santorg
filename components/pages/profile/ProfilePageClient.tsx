@@ -1,6 +1,6 @@
 "use client";
 
-import { useUserStore } from "@/lib/hooks/useUserStore";
+import { useUserStore, useUserStoreHydrated } from "@/lib/hooks/useUserStore";
 import { updateProfileAction } from "@/lib/actions/authActions";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -24,6 +24,8 @@ export default function ProfilePageClient() {
     setUser,
   } = useUserStore();
 
+  const hasHydrated = useUserStoreHydrated();
+
   const [editing, setEditing] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(avatar?.url ?? "");
   const [avatarAlt, setAvatarAlt] = useState(avatar?.alt ?? "");
@@ -35,9 +37,11 @@ export default function ProfilePageClient() {
   const [activeTab, setActiveTab] = useState<"venues" | "bookings">("venues");
 
   useEffect(() => {
+    if (!hasHydrated) return;
     if (!isLoggedIn) router.replace("/login");
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn, hasHydrated, router]);
 
+  if (!hasHydrated) return null;
   if (!isLoggedIn) return null;
 
   async function handleSave() {
