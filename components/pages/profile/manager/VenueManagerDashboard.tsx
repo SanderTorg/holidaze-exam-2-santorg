@@ -1,6 +1,7 @@
 "use client";
 
 import { useUserStore } from "@/lib/hooks/useUserStore";
+import { formatNOK } from "@/lib/utils";
 import {
   deleteVenueAction,
   getManagerVenuesAction,
@@ -9,6 +10,7 @@ import {
 import type { Venue, VenueWithBookings } from "@/lib/types/apiTypes";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { DateTime } from "luxon";
 import {
   BookOpen,
@@ -149,7 +151,10 @@ export default function VenueManagerDashboard() {
           >
             <div className="flex gap-4 p-4">
               {venue.media.length > 0 && (
-                <div className="relative w-28 h-20 shrink-0 rounded-lg overflow-hidden">
+                <Link
+                  href={`/venues/${venue.id}`}
+                  className="relative w-28 h-20 shrink-0 rounded-lg overflow-hidden block"
+                >
                   <Image
                     src={venue.media[0].url}
                     alt={venue.media[0].alt}
@@ -157,19 +162,22 @@ export default function VenueManagerDashboard() {
                     sizes="112px"
                     style={{ objectFit: "cover" }}
                   />
-                </div>
+                </Link>
               )}
 
               <div className="flex flex-col flex-1 min-w-0">
-                <h2 className="font-semibold text-base truncate">
+                <Link
+                  href={`/venues/${venue.id}`}
+                  className="font-semibold text-base truncate hover:underline"
+                >
                   {venue.name}
-                </h2>
+                </Link>
                 <p className="text-sm text-muted-foreground line-clamp-1">
                   {venue.description}
                 </p>
                 <div className="flex flex-wrap items-center gap-4 mt-2 text-sm text-muted-foreground">
                   <span className="font-medium text-foreground">
-                    {venue.price} NOK / night
+                    {formatNOK(venue.price)} / night
                   </span>
                   <span className="flex items-center gap-1">
                     <Users size={14} />

@@ -8,6 +8,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import type { Venue } from "@/lib/types/apiTypes";
+import { formatNOK } from "@/lib/utils";
 
 interface CarouselComponentProps {
   venues: Venue[];
@@ -54,7 +55,9 @@ export default function CarouselComponent({ venues }: CarouselComponentProps) {
                         ★ {venue.rating?.toFixed(1) ?? "N/A"}
                       </span>
                     </div>
-                    <p className="text-sm mt-0.5">${venue.price} / night</p>
+                    <p className="text-sm mt-0.5">
+                      {formatNOK(venue.price)} / night
+                    </p>
                   </div>
                 </div>
               </Link>

@@ -9,6 +9,7 @@ import { BadgeCheck, Pencil, User } from "lucide-react";
 import { toast } from "sonner";
 import VenueManagerDashboard from "./manager/VenueManagerDashboard";
 import ViewBookingsClient from "./customer/ViewBookingsClient";
+import { FormField } from "@/components/universal/FormField";
 
 export default function ProfilePageClient() {
   const router = useRouter();
@@ -85,7 +86,7 @@ export default function ProfilePageClient() {
       </div>
 
       <div className="max-w-2xl mx-auto py-6 px-4 flex flex-col gap-8">
-        <div className="flex items-end gap-6 -mt-14">
+        <div className="flex flex-col sm:flex-row sm:items-end gap-6 -mt-14">
           <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-background shrink-0 bg-muted flex items-center justify-center shadow">
             {avatar?.url ? (
               <Image
@@ -133,8 +134,7 @@ export default function ProfilePageClient() {
           <div className="border rounded-xl p-6 flex flex-col gap-4">
             <h2 className="font-semibold text-lg">Update Profile</h2>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium">Banner URL</label>
+            <FormField label="Banner URL">
               <input
                 type="url"
                 value={bannerUrl}
@@ -142,10 +142,9 @@ export default function ProfilePageClient() {
                 placeholder="https://example.com/banner.jpg"
                 className="rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               />
-            </div>
+            </FormField>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium">Banner alt text</label>
+            <FormField label="Banner alt text">
               <input
                 type="text"
                 value={bannerAlt}
@@ -153,10 +152,9 @@ export default function ProfilePageClient() {
                 placeholder="A short description of the banner"
                 className="rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               />
-            </div>
+            </FormField>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium">Avatar URL</label>
+            <FormField label="Avatar URL">
               <input
                 type="url"
                 value={avatarUrl}
@@ -164,10 +162,9 @@ export default function ProfilePageClient() {
                 placeholder="https://example.com/avatar.jpg"
                 className="rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               />
-            </div>
+            </FormField>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium">Avatar alt text</label>
+            <FormField label="Avatar alt text">
               <input
                 type="text"
                 value={avatarAlt}
@@ -175,7 +172,7 @@ export default function ProfilePageClient() {
                 placeholder="A short description of the image"
                 className="rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               />
-            </div>
+            </FormField>
 
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium">Account type</label>
@@ -207,8 +204,7 @@ export default function ProfilePageClient() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium">Bio</label>
+            <FormField label="Bio">
               <textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
@@ -216,7 +212,7 @@ export default function ProfilePageClient() {
                 placeholder="Tell us a little about yourself..."
                 className="rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
               />
-            </div>
+            </FormField>
 
             <div className="flex gap-3 justify-end">
               <button

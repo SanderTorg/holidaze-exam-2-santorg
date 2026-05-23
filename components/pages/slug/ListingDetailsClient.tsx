@@ -1,7 +1,9 @@
 "use client";
 
 import { VenueWithBookings } from "@/lib/types/apiTypes";
-import { Car, Coffee, Dog, MapPin, Star, Users, Wifi } from "lucide-react";
+import { formatNOK } from "@/lib/utils";
+import { Car, Coffee, Dog, MapPin, Users, Wifi } from "lucide-react";
+import { StarRating } from "@/components/universal/StarRating";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -95,22 +97,7 @@ export default function ListingDetailsClientPage({
       <div>
         <h1 className="text-3xl font-bold mb-4">{venue.name}</h1>
 
-        <div className="flex items-center gap-1 mb-4">
-          {Array.from({ length: 5 }, (_, i) => (
-            <Star
-              key={i}
-              size={18}
-              className={
-                i < Math.round(venue.rating)
-                  ? "fill-yellow-400 text-yellow-400"
-                  : "fill-none text-gray-300"
-              }
-            />
-          ))}
-          <span className="text-sm text-muted-foreground ml-1">
-            {venue.rating.toFixed(1)}
-          </span>
-        </div>
+        <StarRating rating={venue.rating} size={18} className="mb-4" />
 
         {venue.media.length > 0 && (
           <div
@@ -195,9 +182,9 @@ export default function ListingDetailsClientPage({
 
         <aside className="flex flex-col gap-4 rounded-xl border shadow-md p-6 h-fit sticky top-6">
           <div className="text-2xl font-bold">
-            {venue.price}{" "}
+            {formatNOK(venue.price)}
             <span className="text-base font-normal text-muted-foreground">
-              NOK / night
+              / night
             </span>
           </div>
 
@@ -265,7 +252,7 @@ export default function ListingDetailsClientPage({
                     Total:{" "}
                     <span className="font-medium text-foreground">
                       {nights} night{nights !== 1 ? "s" : ""} ·{" "}
-                      {nights * venue.price} NOK
+                      {formatNOK(nights * venue.price)}
                     </span>
                   </span>
                 </>

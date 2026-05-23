@@ -2,6 +2,7 @@ import CarouselComponent from "@/components/pages/home/Carousel";
 import NewsletterSection from "@/components/pages/home/NewsletterSection";
 import { Suspense } from "react";
 import type { Venue } from "@/lib/types/apiTypes";
+import { formatNOK } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -204,7 +205,7 @@ export default async function Home() {
                       </p>
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-gray-900">
-                          ${venue.price}
+                          {formatNOK(venue.price)}
                           <span className="text-sm font-normal text-gray-500">
                             {" "}
                             /night
