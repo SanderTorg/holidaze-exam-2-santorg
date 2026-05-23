@@ -234,6 +234,60 @@ export async function createBooking(
   return json?.data;
 }
 
+export async function deleteBooking(
+  accessToken: string,
+  id: string,
+): Promise<void> {
+  const response = await fetch(
+    `${process.env.API_HOLIDAZE_BOOKINGS_URL}/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    const json = await response.json().catch(() => ({}));
+    const message =
+      json?.errors?.[0]?.message ??
+      `Cancel booking failed (${response.status})`;
+    throw new Error(message);
+  }
+}
+
+export async function updateBooking(
+  accessToken: string,
+  id: string,
+  data: { dateFrom: string; dateTo: string; guests: number },
+): Promise<Booking> {
+  const response = await fetch(
+    `${process.env.API_HOLIDAZE_BOOKINGS_URL}/${id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+        "X-Noroff-API-Key": `${process.env.NOROFF_API_KEY}`,
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  const json = await response.json();
+
+  if (!response.ok) {
+    const message =
+      json?.errors?.[0]?.message ??
+      `Update booking failed (${response.status})`;
+    throw new Error(message);
+  }
+
+  return json?.data;
+}
+
 export async function getProfileBookings(
   name: string,
   accessToken: string,

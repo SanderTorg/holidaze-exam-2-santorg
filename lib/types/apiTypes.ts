@@ -98,6 +98,7 @@ export interface BookingWithVenue extends Booking {
     id: string;
     name: string;
     price: number;
+    maxGuests: number;
     media: Media[];
     location: Location;
   };

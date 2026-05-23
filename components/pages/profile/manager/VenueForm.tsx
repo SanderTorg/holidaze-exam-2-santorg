@@ -9,6 +9,8 @@ import {
 import type { Venue } from "@/lib/types/apiTypes";
 import { toast } from "sonner";
 import { ArrowLeft, Star } from "lucide-react";
+import { FormSection } from "@/components/universal/FormSection";
+import { FormField } from "@/components/universal/FormField";
 
 interface Props {
   initial?: Venue;
@@ -18,7 +20,6 @@ interface Props {
 
 const inputClass =
   "rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring w-full";
-const labelClass = "text-sm font-medium";
 
 export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
   const { accessToken } = useUserStore();
@@ -102,11 +103,8 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
       </h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        <div className="border rounded-xl p-5 flex flex-col gap-4">
-          <h2 className="font-semibold">Basic Info</h2>
-
-          <div className="flex flex-col gap-1.5">
-            <label className={labelClass}>Venue name *</label>
+        <FormSection title="Basic Info">
+          <FormField label="Venue name *">
             <input
               required
               value={form.name}
@@ -114,10 +112,9 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
               className={inputClass}
               placeholder="My Awesome Cabin"
             />
-          </div>
+          </FormField>
 
-          <div className="flex flex-col gap-1.5">
-            <label className={labelClass}>Description *</label>
+          <FormField label="Description *">
             <textarea
               required
               value={form.description}
@@ -126,11 +123,10 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
               className={`${inputClass} resize-none`}
               placeholder="Describe your venue..."
             />
-          </div>
+          </FormField>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Price per night (NOK) *</label>
+            <FormField label="Price per night (NOK) *">
               <input
                 required
                 type="number"
@@ -140,9 +136,8 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
                 className={inputClass}
                 placeholder="500"
               />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Max guests *</label>
+            </FormField>
+            <FormField label="Max guests *">
               <input
                 required
                 type="number"
@@ -152,11 +147,10 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
                 className={inputClass}
                 placeholder="4"
               />
-            </div>
+            </FormField>
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label className={labelClass}>Rating</label>
+          <FormField label="Rating">
             <div className="flex gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -181,13 +175,11 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
                 </button>
               ))}
             </div>
-          </div>
-        </div>
+          </FormField>
+        </FormSection>
 
-        <div className="border rounded-xl p-5 flex flex-col gap-4">
-          <h2 className="font-semibold">Image</h2>
-          <div className="flex flex-col gap-1.5">
-            <label className={labelClass}>Image URL</label>
+        <FormSection title="Image">
+          <FormField label="Image URL">
             <input
               type="url"
               value={form.mediaUrl}
@@ -195,20 +187,18 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
               className={inputClass}
               placeholder="https://example.com/image.jpg"
             />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label className={labelClass}>Image alt text</label>
+          </FormField>
+          <FormField label="Image alt text">
             <input
               value={form.mediaAlt}
               onChange={setField("mediaAlt")}
               className={inputClass}
               placeholder="A photo of the venue"
             />
-          </div>
-        </div>
+          </FormField>
+        </FormSection>
 
-        <div className="border rounded-xl p-5 flex flex-col gap-4">
-          <h2 className="font-semibold">Included</h2>
+        <FormSection title="Included">
           <div className="grid grid-cols-2 gap-3">
             {(
               [
@@ -232,49 +222,44 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
               </label>
             ))}
           </div>
-        </div>
+        </FormSection>
 
-        <div className="border rounded-xl p-5 flex flex-col gap-4">
-          <h2 className="font-semibold">Location</h2>
+        <FormSection title="Location">
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Address</label>
+            <FormField label="Address">
               <input
                 value={form.address}
                 onChange={setField("address")}
                 className={inputClass}
                 placeholder="123 Main St"
               />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>City</label>
+            </FormField>
+            <FormField label="City">
               <input
                 value={form.city}
                 onChange={setField("city")}
                 className={inputClass}
                 placeholder="Oslo"
               />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Zip</label>
+            </FormField>
+            <FormField label="Zip">
               <input
                 value={form.zip}
                 onChange={setField("zip")}
                 className={inputClass}
                 placeholder="0150"
               />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <label className={labelClass}>Country</label>
+            </FormField>
+            <FormField label="Country">
               <input
                 value={form.country}
                 onChange={setField("country")}
                 className={inputClass}
                 placeholder="Norway"
               />
-            </div>
+            </FormField>
           </div>
-        </div>
+        </FormSection>
 
         <div className="flex gap-3 justify-end">
           <button

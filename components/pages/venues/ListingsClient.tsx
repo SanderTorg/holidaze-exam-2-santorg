@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { formatNOK } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -9,7 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Venue } from "@/lib/types/apiTypes";
-import { MapPin, Search, Star, Users } from "lucide-react";
+import { MapPin, Search, Users } from "lucide-react";
+import { StarRating } from "@/components/universal/StarRating";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -152,7 +154,10 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
         {FILTER_OPTIONS.map((f) => (
           <button
             key={f.value}
-            onClick={() => { setFilter(f.value); setPage(1); }}
+            onClick={() => {
+              setFilter(f.value);
+              setPage(1);
+            }}
             className={`rounded-full px-4 py-1.5 text-sm font-medium border transition-colors ${
               filter === f.value
                 ? "bg-foreground text-background border-foreground"
@@ -172,14 +177,20 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
           <input
             type="text"
             value={query}
-            onChange={(e) => { setQuery(e.target.value); setPage(1); }}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setPage(1);
+            }}
             placeholder="Search by name, city, country..."
             className="w-full rounded-md border border-input bg-background pl-9 pr-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
         <select
           value={sort}
-          onChange={(e) => { setSort(e.target.value as SortOption); setPage(1); }}
+          onChange={(e) => {
+            setSort(e.target.value as SortOption);
+            setPage(1);
+          }}
           className="flex cursor-pointer rounded-md  border border-input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring"
         >
           {SORT_OPTIONS.map((opt) => (
@@ -221,7 +232,7 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
                 className="group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute top-3 left-3 bg-black/70 text-white text-sm font-semibold px-2 py-1 rounded-full">
-                {venue.price} NOK / night
+                {formatNOK(venue.price)} / night
               </div>
             </div>
 
@@ -229,22 +240,7 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
               <CardTitle className="text-base font-semibold leading-tight line-clamp-1">
                 {venue.name}
               </CardTitle>
-              <div className="flex items-center gap-1 mt-1">
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Star
-                    key={i}
-                    size={14}
-                    className={
-                      i < Math.round(venue.rating)
-                        ? "fill-yellow-400 text-yellow-400"
-                        : "fill-none text-gray-300"
-                    }
-                  />
-                ))}
-                <span className="text-xs text-muted-foreground ml-1">
-                  {venue.rating.toFixed(1)}
-                </span>
-              </div>
+              <StarRating rating={venue.rating} size={14} className="mt-1" />
             </CardHeader>
 
             <CardContent className="flex flex-col gap-2 pb-2 flex-1">
