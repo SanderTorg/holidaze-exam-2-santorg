@@ -1,4 +1,3 @@
-import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -39,11 +38,3 @@ export const useUserStore = create<UserStore>()(
     { name: "user-store" },
   ),
 );
-
-export function useUserStoreHydrated() {
-  return useSyncExternalStore(
-    (callback) => useUserStore.persist.onFinishHydration(callback),
-    () => useUserStore.persist.hasHydrated(),
-    () => false,
-  );
-}
