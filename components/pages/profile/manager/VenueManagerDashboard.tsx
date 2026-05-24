@@ -191,7 +191,7 @@ export default function VenueManagerDashboard() {
                 </div>
               </div>
 
-              <div className="flex flex-row sm:flex-col gap-2 shrink-0">
+              <div className="flex flex-row flex-wrap sm:flex-col gap-2 shrink-0">
                 <button
                   onClick={() => {
                     setEditingVenue(venue);

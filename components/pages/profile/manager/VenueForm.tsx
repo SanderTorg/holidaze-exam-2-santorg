@@ -125,7 +125,7 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
             />
           </FormField>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField label="Price per night (NOK) *">
               <input
                 required
@@ -199,7 +199,7 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
         </FormSection>
 
         <FormSection title="Included">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {(
               [
                 { key: "wifi", label: "WiFi" },
@@ -225,7 +225,7 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
         </FormSection>
 
         <FormSection title="Location">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField label="Address">
               <input
                 value={form.address}
@@ -265,7 +265,7 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 text-sm rounded-lg border hover:bg-muted transition-colors"
+            className="cursor-pointer px-4 py-2 text-sm rounded-lg border hover:bg-muted transition-colors"
           >
             Cancel
           </button>
