@@ -93,7 +93,7 @@ export default function VenueForm({ initial, onSuccess, onCancel }: Props) {
     <div className="max-w-2xl mx-auto py-8 px-4">
       <button
         onClick={onCancel}
-        className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
+        className="flex cursor-pointer items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
       >
         <ArrowLeft size={16} /> Back to my venues
       </button>
