@@ -14,11 +14,11 @@ A holiday venue booking platform where users can browse venues, make bookings, a
 
 **[Production Deployment](https://holidaze-exam-2-santorg.vercel.app/)**
 
-**[Figma Project]()**
+**[Figma Project](https://www.figma.com/design/okKePIY07asxIX5LKaQCN4/Holidaze---Exam-2?node-id=12-23068&t=z4uBWAaoMPxBjMUC-1)**
 
-**[Mobile Design]()**
+**[Mobile Design](https://www.figma.com/design/okKePIY07asxIX5LKaQCN4/Holidaze---Exam-2?node-id=12-23186&t=z4uBWAaoMPxBjMUC-1)**
 
-**[Desktop Design]()**
+**[Desktop Design](https://www.figma.com/design/okKePIY07asxIX5LKaQCN4/Holidaze---Exam-2?node-id=12-14564&t=z4uBWAaoMPxBjMUC-1)**
 
 ## Features
 
