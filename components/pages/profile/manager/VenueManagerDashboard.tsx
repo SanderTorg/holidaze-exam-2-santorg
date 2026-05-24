@@ -149,17 +149,17 @@ export default function VenueManagerDashboard() {
             key={venue.id}
             className="border rounded-xl overflow-hidden shadow-sm"
           >
-            <div className="flex gap-4 p-4">
+            <div className="flex flex-col sm:flex-row gap-4 p-4">
               {venue.media.length > 0 && (
                 <Link
                   href={`/venues/${venue.id}`}
-                  className="relative w-28 h-20 shrink-0 rounded-lg overflow-hidden block"
+                  className="relative w-full h-44 sm:w-28 sm:h-20 shrink-0 rounded-lg overflow-hidden block"
                 >
                   <Image
                     src={venue.media[0].url}
                     alt={venue.media[0].alt}
                     fill
-                    sizes="112px"
+                    sizes="(max-width: 640px) 100vw, 112px"
                     style={{ objectFit: "cover" }}
                   />
                 </Link>
@@ -191,25 +191,25 @@ export default function VenueManagerDashboard() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2 shrink-0">
+              <div className="flex flex-row sm:flex-col gap-2 shrink-0">
                 <button
                   onClick={() => {
                     setEditingVenue(venue);
                     setView("edit");
                   }}
-                  className="flex cursor-pointer items-center gap-1.5 text-sm border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors"
+                  className="flex flex-1 sm:flex-none cursor-pointer items-center justify-center gap-1.5 text-sm border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors"
                 >
                   <Pencil size={14} /> Edit
                 </button>
                 <button
                   onClick={() => handleDelete(venue.id)}
-                  className="flex cursor-pointer items-center gap-1.5 text-sm border border-red-200 text-red-600 rounded-lg px-3 py-1.5 hover:bg-red-50 transition-colors"
+                  className="flex flex-1 sm:flex-none cursor-pointer items-center justify-center gap-1.5 text-sm border border-red-200 text-red-600 rounded-lg px-3 py-1.5 hover:bg-red-50 transition-colors"
                 >
                   <Trash2 size={14} /> Delete
                 </button>
                 <button
                   onClick={() => toggleBookings(venue.id)}
-                  className="flex cursor-pointer items-center justify-center gap-1.5 text-sm border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors"
+                  className="flex flex-1 sm:flex-none cursor-pointer items-center justify-center gap-1.5 text-sm border rounded-lg px-3 py-1.5 hover:bg-muted transition-colors"
                 >
                   <CalendarDays size={14} />
                   {expandedId === venue.id ? (
