@@ -177,6 +177,35 @@ export default function ListingDetailsClientPage({
               </div>
             </section>
           )}
+
+          {venue.owner && (
+            <section>
+              <h2 className="text-xl font-semibold mb-3">Hosted by</h2>
+              <div className="flex items-center gap-4 rounded-xl border p-4">
+                {venue.owner.avatar?.url ? (
+                  <div className="relative w-14 h-14 rounded-full overflow-hidden shrink-0">
+                    <Image
+                      src={venue.owner.avatar.url}
+                      alt={venue.owner.avatar.alt || venue.owner.name}
+                      fill
+                      sizes="56px"
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
+                ) : (
+                  <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center text-xl font-semibold shrink-0">
+                    {venue.owner.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <div className="flex flex-col">
+                  <span className="font-semibold">{venue.owner.name}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {venue.owner.email}
+                  </span>
+                </div>
+              </div>
+            </section>
+          )}
         </div>
 
         <aside className="flex flex-col gap-4 rounded-xl border shadow-md p-6 h-fit sticky top-6">
