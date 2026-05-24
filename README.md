@@ -20,6 +20,12 @@ A holiday venue booking platform where users can browse venues, make bookings, a
 
 **[Desktop Design](https://www.figma.com/design/okKePIY07asxIX5LKaQCN4/Holidaze---Exam-2?node-id=12-14564&t=z4uBWAaoMPxBjMUC-1)**
 
+**[GitHub Actions](https://github.com/SanderTorg/holidaze-exam-2-santorg/actions)**
+
+**[Playwright Test](https://github.com/SanderTorg/holidaze-exam-2-santorg/actions/workflows/playwright.yml)**
+
+**[Vitest Test](https://github.com/SanderTorg/holidaze-exam-2-santorg/actions/workflows/vitest.yml)**
+
 ## Features
 
 - **User Authentication**: Register and log in as a customer or venue manager.
