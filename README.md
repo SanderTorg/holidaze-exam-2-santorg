@@ -12,6 +12,8 @@ A holiday venue booking platform where users can browse venues, make bookings, a
 
 **[Github Gannt Chart](https://github.com/users/SanderTorg/projects/6/views/4)**
 
+**[Production Deployment](https://holidaze-exam-2-santorg.vercel.app/)**
+
 **[Figma Project]()**
 
 **[Mobile Design]()**
