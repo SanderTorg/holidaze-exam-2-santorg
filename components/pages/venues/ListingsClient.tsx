@@ -158,7 +158,7 @@ export function ListingsClient({ venues }: { venues: Venue[] }) {
               setFilter(f.value);
               setPage(1);
             }}
-            className={`rounded-full px-4 py-1.5 text-sm font-medium border transition-colors ${
+            className={`cursor-pointer rounded-full px-4 py-1.5 text-sm font-medium border transition-colors ${
               filter === f.value
                 ? "bg-foreground text-background border-foreground"
                 : "bg-background text-muted-foreground border-input hover:border-foreground hover:text-foreground"
