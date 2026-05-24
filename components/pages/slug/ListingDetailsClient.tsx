@@ -1,20 +1,57 @@
 "use client";
 
-import { DatumWithBookings } from "@/lib/types/apiTypes";
-import { Car, Coffee, Dog, MapPin, Star, Users, Wifi } from "lucide-react";
-import Image from "next/image";
+import { VenueWithBookings } from "@/lib/types/apiTypes";
+import { formatNOK } from "@/lib/utils";
+import { Car, Coffee, Dog, MapPin, Users, Wifi } from "lucide-react";
+import { StarRating } from "@/components/universal/StarRating";
+
+import Link from "next/link";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { Calendar } from "@/components/ui/calendar";
 import { DateTime } from "luxon";
-import { enUS } from "date-fns/locale";
+import { useUserStore } from "@/lib/hooks/useUserStore";
+import { createBookingAction } from "@/lib/actions/bookingActions";
+import { toast } from "sonner";
+import Image from "next/image";
 
 export default function ListingDetailsClientPage({
   venue,
 }: {
-  venue: DatumWithBookings;
+  venue: VenueWithBookings;
 }) {
   const [range, setRange] = useState<DateRange | undefined>();
+  const [guests, setGuests] = useState(1);
+  const [isBooking, setIsBooking] = useState(false);
+  const {
+    accessToken,
+    isLoggedIn,
+    venueManager,
+    name: userName,
+  } = useUserStore();
+
+  const isOwnVenue =
+    venueManager && !!venue.owner && venue.owner.name === userName;
+
+  async function handleBook() {
+    if (!range?.from || !range?.to || !accessToken) return;
+    setIsBooking(true);
+    try {
+      await createBookingAction(accessToken, {
+        dateFrom: DateTime.fromJSDate(range.from).toISO()!,
+        dateTo: DateTime.fromJSDate(range.to).toISO()!,
+        guests,
+        venueId: venue.id,
+      });
+      toast.success("Booking confirmed!");
+      setRange(undefined);
+      setGuests(1);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Booking failed");
+    } finally {
+      setIsBooking(false);
+    }
+  }
 
   const bookedDates: Date[] = (venue.bookings ?? []).flatMap((b) => {
     const dates: Date[] = [];
@@ -59,22 +96,7 @@ export default function ListingDetailsClientPage({
       <div>
         <h1 className="text-3xl font-bold mb-4">{venue.name}</h1>
 
-        <div className="flex items-center gap-1 mb-4">
-          {Array.from({ length: 5 }, (_, i) => (
-            <Star
-              key={i}
-              size={18}
-              className={
-                i < Math.round(venue.rating)
-                  ? "fill-yellow-400 text-yellow-400"
-                  : "fill-muted text-muted"
-              }
-            />
-          ))}
-          <span className="text-sm text-muted-foreground ml-1">
-            {venue.rating.toFixed(1)}
-          </span>
-        </div>
+        <StarRating rating={venue.rating} size={18} className="mb-4" />
 
         {venue.media.length > 0 && (
           <div
@@ -93,7 +115,13 @@ export default function ListingDetailsClientPage({
                     : "h-60"
                 }`}
               >
-                <Image src={m.url} alt={m.alt} fill className="object-cover" />
+                <Image
+                  src={m.url}
+                  alt={m.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: "cover" }}
+                />
               </div>
             ))}
           </div>
@@ -153,15 +181,37 @@ export default function ListingDetailsClientPage({
 
         <aside className="flex flex-col gap-4 rounded-xl border shadow-md p-6 h-fit sticky top-6">
           <div className="text-2xl font-bold">
-            {venue.price}{" "}
+            {formatNOK(venue.price)}
             <span className="text-base font-normal text-muted-foreground">
-              NOK / night
+              / night
             </span>
           </div>
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Users size={16} />
             Up to {venue.maxGuests} guests
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-medium" htmlFor="guests">
+              Guests
+            </label>
+            <input
+              id="guests"
+              type="number"
+              min={1}
+              max={venue.maxGuests}
+              value={guests}
+              onChange={(e) =>
+                setGuests(
+                  Math.min(
+                    venue.maxGuests,
+                    Math.max(1, Number(e.target.value)),
+                  ),
+                )
+              }
+              className="w-full rounded-md border px-3 py-2 text-sm"
+            />
           </div>
 
           <div className="border-t pt-4">
@@ -173,7 +223,6 @@ export default function ListingDetailsClientPage({
               disabled={[{ before: today }, ...bookedDates]}
               numberOfMonths={1}
               className="rounded-md border w-full p-0"
-              locale={enUS}
             />
           </div>
 
@@ -201,7 +250,7 @@ export default function ListingDetailsClientPage({
                     Total:{" "}
                     <span className="font-medium text-foreground">
                       {nights} night{nights !== 1 ? "s" : ""} ·{" "}
-                      {nights * venue.price} NOK
+                      {formatNOK(nights * venue.price)}
                     </span>
                   </span>
                 </>
@@ -209,12 +258,39 @@ export default function ListingDetailsClientPage({
             </div>
           )}
 
-          <button
-            disabled={!range?.from || !range?.to}
-            className="mt-2 cursor-pointer w-full rounded-lg bg-primary text-primary-foreground py-2.5 font-semibold hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            Book now
-          </button>
+          {!isLoggedIn && range?.from && range?.to && (
+            <p className="text-xs text-muted-foreground text-center">
+              You must be logged in to book.
+            </p>
+          )}
+
+          {isOwnVenue ? (
+            <div className="mt-2 flex flex-col gap-2">
+              <p className="text-sm text-center text-muted-foreground border rounded-lg py-2 px-3 bg-muted">
+                This is your venue.
+              </p>
+              <Link
+                href="/profile"
+                className="w-full text-center rounded-lg border py-2 text-sm font-medium hover:bg-muted transition-colors"
+              >
+                View bookings
+              </Link>
+              <Link
+                href="/profile"
+                className="w-full text-center rounded-lg border py-2 text-sm font-medium hover:bg-muted transition-colors"
+              >
+                My venues
+              </Link>
+            </div>
+          ) : (
+            <button
+              disabled={!range?.from || !range?.to || !isLoggedIn || isBooking}
+              onClick={handleBook}
+              className="mt-2 cursor-pointer w-full rounded-lg bg-primary text-primary-foreground py-2.5 font-semibold hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {isBooking ? "Booking..." : "Book now"}
+            </button>
+          )}
         </aside>
       </div>
     </div>

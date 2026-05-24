@@ -59,7 +59,9 @@ export default function Navbar() {
                       src={avatar.url}
                       alt={avatar.alt ?? name}
                       fill
-                      className="object-cover cursor-pointer"
+                      sizes="36px"
+                      style={{ objectFit: "cover" }}
+                      className="cursor-pointer"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-muted">
@@ -120,7 +122,9 @@ export default function Navbar() {
                       src={avatar.url}
                       alt={avatar.alt ?? name}
                       fill
-                      className="object-cover cursor-pointer"
+                      sizes="36px"
+                      style={{ objectFit: "cover" }}
+                      className="cursor-pointer"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-muted">

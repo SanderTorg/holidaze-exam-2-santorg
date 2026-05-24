@@ -1,14 +1,16 @@
 "use client";
 
 import { useUserStore } from "@/lib/hooks/useUserStore";
+import { formatNOK } from "@/lib/utils";
 import {
   deleteVenueAction,
   getManagerVenuesAction,
   getVenueWithBookingsAction,
 } from "@/lib/actions/venueActions";
-import type { Datum, DatumWithBookings } from "@/lib/types/apiTypes";
+import type { Venue, VenueWithBookings } from "@/lib/types/apiTypes";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { DateTime } from "luxon";
 import {
   BookOpen,
@@ -28,13 +30,13 @@ type View = "list" | "create" | "edit";
 export default function VenueManagerDashboard() {
   const { name, accessToken, isLoggedIn, venueManager } = useUserStore();
 
-  const [venues, setVenues] = useState<Datum[]>([]);
+  const [venues, setVenues] = useState<Venue[]>([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<View>("list");
-  const [editingVenue, setEditingVenue] = useState<Datum | null>(null);
+  const [editingVenue, setEditingVenue] = useState<Venue | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [bookingsMap, setBookingsMap] = useState<
-    Record<string, DatumWithBookings>
+    Record<string, VenueWithBookings>
   >({});
   const [loadingBookingsId, setLoadingBookingsId] = useState<string | null>(
     null,
@@ -74,14 +76,14 @@ export default function VenueManagerDashboard() {
     setLoadingBookingsId(null);
   }
 
-  function handleEditSuccess(updated: Datum) {
+  function handleEditSuccess(updated: Venue) {
     setVenues((v) => v.map((x) => (x.id === updated.id ? updated : x)));
     setView("list");
     setEditingVenue(null);
     toast.success("Venue updated!");
   }
 
-  function handleCreateSuccess(created: Datum) {
+  function handleCreateSuccess(created: Venue) {
     setVenues((v) => [created, ...v]);
     setView("list");
     toast.success("Venue created!");
@@ -149,26 +151,33 @@ export default function VenueManagerDashboard() {
           >
             <div className="flex gap-4 p-4">
               {venue.media.length > 0 && (
-                <div className="relative w-28 h-20 shrink-0 rounded-lg overflow-hidden">
+                <Link
+                  href={`/venues/${venue.id}`}
+                  className="relative w-28 h-20 shrink-0 rounded-lg overflow-hidden block"
+                >
                   <Image
                     src={venue.media[0].url}
                     alt={venue.media[0].alt}
                     fill
-                    className="object-cover"
+                    sizes="112px"
+                    style={{ objectFit: "cover" }}
                   />
-                </div>
+                </Link>
               )}
 
               <div className="flex flex-col flex-1 min-w-0">
-                <h2 className="font-semibold text-base truncate">
+                <Link
+                  href={`/venues/${venue.id}`}
+                  className="font-semibold text-base truncate hover:underline"
+                >
                   {venue.name}
-                </h2>
+                </Link>
                 <p className="text-sm text-muted-foreground line-clamp-1">
                   {venue.description}
                 </p>
                 <div className="flex flex-wrap items-center gap-4 mt-2 text-sm text-muted-foreground">
                   <span className="font-medium text-foreground">
-                    {venue.price} NOK / night
+                    {formatNOK(venue.price)} / night
                   </span>
                   <span className="flex items-center gap-1">
                     <Users size={14} />
